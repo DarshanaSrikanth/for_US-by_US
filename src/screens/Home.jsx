@@ -9,6 +9,11 @@ import LoadingSpinner from '../components/shared/LoadingSpinner';
 import ChestVisual from '../components/chest/ChestVisual';
 import './Home.css';
 
+import { doc, deleteDoc } from "firebase/firestore";
+import { db } from "../firebase/config"; // adjust path if needed
+
+const isDev=import.meta.env.DEV;
+
 const Home = () => {
   const navigate = useNavigate();
   const { user, profile } = useAuth();
@@ -20,6 +25,8 @@ const Home = () => {
   const [settings, setSettings] = useState(null);
   const [unlockInfo, setUnlockInfo] = useState(null);
   const [isCreatingChest, setIsCreatingChest] = useState(false);
+  const [currentChestId, setCurrentChestId] = useState(null); // ✅ declare state
+
 
   useEffect(() => {
     loadHomeData();
@@ -47,8 +54,8 @@ const Home = () => {
         const activeChest = await getActiveChest(user.uid, profile.pairedUserId);
         
         if (activeChest) {
-          setChestData(activeChest);
-          
+          setChestData(activeChest); 
+          setCurrentChestId(activeChest.id);         
           // Check if chest is unlockable
           const unlockCheck = await checkChestUnlockable(activeChest.id);
           setUnlockInfo(unlockCheck);
@@ -95,7 +102,15 @@ const Home = () => {
       }
 
       // Create new chest
-      await createChest(user.uid, profile.pairedUserId, settings.chestDuration);
+      const durationInMinutes = isDev ? 1 : (settings.chestDuration * 1440);
+
+      await createChest(
+        user.uid,
+        profile.pairedUserId,
+        durationInMinutes
+      );
+
+      // await createChest(user.uid, profile.pairedUserId, settings.chestDuration);
       
       // Reload data
       await loadHomeData();
@@ -132,6 +147,41 @@ const Home = () => {
     navigate('/history');
   };
 
+  //Delete Function added
+    const handleDelete = async () => {
+    if (!currentChestId) {
+      alert("No chest to delete");
+      return;
+    }
+
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete the current chest? This action cannot be undone."
+    );
+    if (!confirmDelete) return;
+
+    try {
+      await deleteDoc(doc(db, "chests", currentChestId));
+      alert("Chest deleted successfully!");
+      
+      // Reset ALL relevant states after deletion
+      setCurrentChestId(null);
+      setChestData(null);
+      setUnlockInfo(null);
+      // Force a reload to move to state B (no active chest)
+      await loadHomeData();
+      
+    } catch (error) {
+      console.error("Delete error:", error);
+      // Provide more specific error messages
+      if (error.code === 'permission-denied') {
+        alert("Permission denied. Check your Firestore security rules.");
+      } else {
+        alert("Failed to delete chest. Check console for details.");
+      }
+    }
+  };
+
+
   if (loading) {
     return (
       <div className="home-container">
@@ -160,7 +210,11 @@ const Home = () => {
   return (
     <div className="home-container">
       <Header title="The Chest" />
-      
+        {isDev && (
+        <div className="dev-badge">
+          DEV MODE — Chest unlocks in 1 minute
+        </div>
+      )}
       <main className="home-content">
         {/* State A: Not Paired */}
         {screenState === 'A' && (
@@ -330,6 +384,15 @@ const Home = () => {
                   Settings
                 </button>
               </div>
+              {/* DEV ONLY: Delete Chest */}
+              {isDev && (
+                <button
+                  className="action-button danger"
+                  onClick={handleDelete}
+                >
+                  Delete Chest (Dev Only)
+                </button>
+              )}
             </div>
           </div>
         )}
