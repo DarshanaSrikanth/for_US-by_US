@@ -1,0 +1,215 @@
+.onboarding-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background-color: #f8f9fa;
+}
+
+.onboarding-card {
+  width: 100%;
+  max-width: 400px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  padding: 40px 30px;
+  text-align: center;
+}
+
+.app-header {
+  margin-bottom: 30px;
+}
+
+.app-title {
+  font-size: 2.5rem;
+  font-weight: 300;
+  color: #333;
+  margin: 0;
+  letter-spacing: 1px;
+}
+
+.app-subtitle {
+  color: #666;
+  font-size: 0.95rem;
+  margin-top: 8px;
+  font-weight: 400;
+}
+
+.auth-tabs {
+  display: flex;
+  margin-bottom: 25px;
+  border-bottom: 1px solid #eaeaea;
+}
+
+.tab {
+  flex: 1;
+  padding: 12px;
+  background: none;
+  border: none;
+  font-size: 1rem;
+  color: #888;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.tab.active {
+  color: #333;
+  font-weight: 500;
+}
+
+.tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: #333;
+}
+
+.auth-form {
+  text-align: left;
+}
+
+.error-message {
+  background-color: #fee;
+  color: #c33;
+  padding: 12px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+  border: 1px solid #fcc;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: #333;
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.form-group input[type="text"],
+.form-group input[type="password"] {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border-color 0.2s ease;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #999;
+}
+
+.form-group input:disabled {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+}
+
+.gender-options {
+  display: flex;
+  gap: 20px;
+  margin-top: 8px;
+}
+
+.gender-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  padding: 10px 15px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  flex: 1;
+  transition: all 0.2s ease;
+}
+
+.gender-option:hover {
+  border-color: #999;
+}
+
+.gender-option input[type="radio"] {
+  margin: 0;
+}
+
+.gender-option span {
+  color: #333;
+}
+
+.gender-option input:checked + span {
+  font-weight: 500;
+}
+
+.gender-note {
+  margin-top: 8px;
+  color: #666;
+  font-size: 0.85rem;
+  font-style: italic;
+}
+
+.submit-button {
+  width: 100%;
+  padding: 14px;
+  background-color: #333;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  margin-top: 10px;
+}
+
+.submit-button:hover:not(:disabled) {
+  background-color: #444;
+}
+
+.submit-button:disabled {
+  background-color: #999;
+  cursor: not-allowed;
+}
+
+.auth-switch {
+  margin-top: 25px;
+  color: #666;
+  font-size: 0.95rem;
+}
+
+.switch-button {
+  background: none;
+  border: none;
+  color: #333;
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 0.95rem;
+  padding: 0;
+}
+
+.switch-button:hover {
+  color: #000;
+}
+
+@media (max-width: 480px) {
+  .onboarding-card {
+    padding: 30px 20px;
+  }
+  
+  .app-title {
+    font-size: 2rem;
+  }
+  
+  .gender-options {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
