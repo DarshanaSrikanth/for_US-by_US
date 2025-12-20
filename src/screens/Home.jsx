@@ -12,7 +12,7 @@ import './Home.css';
 import { doc, deleteDoc } from "firebase/firestore";
 import { db } from "../firebase/config"; // adjust path if needed
 
-const isDev=import.meta.env.DEV;
+const isDev=true;
 
 const Home = () => {
   const navigate = useNavigate();

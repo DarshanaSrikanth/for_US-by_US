@@ -152,7 +152,7 @@ export const getChitsForChest = async (chestId, readerId) => {
   }
 };
 
-// Mark chit as read
+
 export const markChitAsRead = async (chestId, chitId, readerId) => {
   try {
     const timestamp = serverTimestamp();
