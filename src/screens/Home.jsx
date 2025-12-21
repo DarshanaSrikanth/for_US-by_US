@@ -212,7 +212,7 @@ const Home = () => {
       <Header title="The Chest" />
         {isDev && (
         <div className="dev-badge">
-          DEV MODE — Chest unlocks in 1 minute
+          {/* DEV MODE — Chest unlocks in 1 minute */}
         </div>
       )}
       <main className="home-content">

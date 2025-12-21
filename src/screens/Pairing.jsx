@@ -137,7 +137,7 @@ const Pairing = () => {
           <p><strong>Gender:</strong> {currentUserGender}</p>
         </div>
 
-        <div className="pairing-warning">
+        {/* <div className="pairing-warning">
           <div className="warning-icon">⚠️</div>
           <p>
             <strong>Important:</strong> Once paired, you cannot un-pair or change partners. 
@@ -150,7 +150,7 @@ const Pairing = () => {
             <p>Your gender: <strong>{currentUserGender}</strong></p>
             <p>You must pair with someone of opposite gender.</p>
           </div>
-        )}
+        )} */}
 
         <form onSubmit={handleSubmit} className="pairing-form">
           {error && (
@@ -213,7 +213,7 @@ const Pairing = () => {
           </div>
         </form>
 
-        <div className="pairing-help">
+        {/* <div className="pairing-help">
           <p>
             <strong>Need help?</strong> Make sure your partner has:
           </p>
@@ -222,7 +222,7 @@ const Pairing = () => {
             <li>Selected their gender</li>
             <li>Not paired with anyone else</li>
           </ul>
-        </div>
+        </div> */}
       </div>
     </div>
   );

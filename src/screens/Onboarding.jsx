@@ -5,7 +5,7 @@ import './Onboarding.css';
 
 const Onboarding = () => {
   const navigate = useNavigate();
-  const [isSignUp, setIsSignUp] = useState(true);
+  const [isSignUp, setIsSignUp] = useState(false);
   const [formData, setFormData] = useState({
     username: '',
     password: '',
@@ -66,10 +66,9 @@ const Onboarding = () => {
   return (
     <div className="onboarding-container">
       <div className="onboarding-card">
-        <div className="app-header">
+        {/* <div className="app-header">
           <h1 className="app-title">The Chest</h1>
-          <p className="app-subtitle">Thoughtful emotional sharing</p>
-        </div>
+        </div> */}
 
         <div className="auth-tabs">
           <button
@@ -150,7 +149,9 @@ const Onboarding = () => {
                       required
                       disabled={loading}
                     />
-                    <span>Male</span>
+                    <span className="gender-icon" aria-hidden="true">
+                      <i className="bi bi-gender-male"></i>
+                    </span>
                   </label>
                   <label className="gender-option">
                     <input
@@ -162,12 +163,12 @@ const Onboarding = () => {
                       required
                       disabled={loading}
                     />
-                    <span>Female</span>
+                    <span className="gender-icon" aria-hidden="true">
+                      <i className="bi bi-gender-female"></i>
+                    </span>
                   </label>
                 </div>
-                <p className="gender-note">
-                  This cannot be changed later and is used for pairing
-                </p>
+
               </div>
             </>
           )}
@@ -181,7 +182,7 @@ const Onboarding = () => {
           </button>
         </form>
 
-        <div className="auth-switch">
+        {/* <div className="auth-switch">
           {isSignUp ? (
             <p>
               Already have an account?{' '}
@@ -205,7 +206,7 @@ const Onboarding = () => {
               </button>
             </p>
           )}
-        </div>
+        </div> */}
       </div>
     </div>
   );
