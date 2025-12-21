@@ -299,35 +299,7 @@ const AddChit = () => {
             )}
           </div>
 
-          <div className="form-section">
-            <h3>Important Notes</h3>
-            <div className="notes-list">
-              <div className="note-item">
-                <div className="note-icon">⚠️</div>
-                <div className="note-content">
-                  <strong>No editing or deletion:</strong> Once submitted, chits cannot be changed or removed.
-                </div>
-              </div>
-              <div className="note-item">
-                <div className="note-icon">🔒</div>
-                <div className="note-content">
-                  <strong>Time-locked:</strong> Your partner will read this only after the chest unlocks.
-                </div>
-              </div>
-              <div className="note-item">
-                <div className="note-icon">👁️</div>
-                <div className="note-content">
-                  <strong>You cannot read your own chits:</strong> This encourages honest sharing.
-                </div>
-              </div>
-              <div className="note-item">
-                <div className="note-icon">💭</div>
-                <div className="note-content">
-                  <strong>Emotion labeling:</strong> Helps your partner understand the context.
-                </div>
-              </div>
-            </div>
-          </div>
+
 
           <div className="form-actions">
             <button

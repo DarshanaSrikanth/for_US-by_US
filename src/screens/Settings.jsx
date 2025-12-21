@@ -187,9 +187,7 @@ const Settings = () => {
                     : 'Recently'}
                 </strong>
               </div>
-              <div className="partner-note">
-                <p>Note: Pairing is permanent and cannot be changed.</p>
-              </div>
+
             </div>
           </div>
         )}
@@ -323,15 +321,6 @@ const Settings = () => {
             </button>
           </div>
         </form>
-
-        <div className="settings-info">
-          <h4>About These Settings</h4>
-          <ul>
-            <li><strong>Chest Duration:</strong> This determines how long you must wait before opening a chest. Longer durations allow for more reflection time.</li>
-            <li><strong>Settings Lock:</strong> Settings cannot be changed while a chest is active. This ensures consistency throughout the sharing period.</li>
-            <li><strong>Pairing:</strong> Your pairing is permanent and cannot be changed. Choose your partner carefully.</li>
-          </ul>
-        </div>
       </main>
     </div>
   );

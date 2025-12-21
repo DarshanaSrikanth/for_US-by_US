@@ -1,113 +1,167 @@
+:root {
+  --navy: #0b2345;          /* dark blue bar from palette */
+  --navy-dark: #050f24;
+  --sand: #c9a882;          /* mid beige */
+  --sand-light: #e2cfb2;    /* light beige */
+  --sand-lighter: #f7efe1;  /* almost cream */
+  --text-main: #0b2345;
+  --text-muted: #6b7280;
+  --accent: #c9a882;
+  --danger-bg: #fee;
+  --danger-border: #fcc;
+  --danger-text: #c33;
+  --success-bg: #d4edda;
+  --success-border: #c3e6cb;
+  --success-text: #155724;
+}
+
+/* ===== Layout & background ===== */
+
 .pairing-container {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
-  background-color: #f8f9fa;
+  padding: 24px;
+  background:
+    radial-gradient(circle at top left, rgba(201, 168, 130, 0.18), transparent 55%),
+    radial-gradient(circle at bottom right, rgba(226, 207, 178, 0.16), transparent 55%),
+    linear-gradient(145deg, var(--navy-dark) 0%, var(--navy) 55%, var(--navy-dark) 100%);
+  background-attachment: fixed;
+  position: relative;
+  overflow: hidden;
 }
+
+/* soft floating blobs */
+.pairing-container::before,
+.pairing-container::after {
+  content: "";
+  position: absolute;
+  width: 260px;
+  height: 260px;
+  border-radius: 50%;
+  filter: blur(50px);
+  opacity: 0.24;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
+.pairing-container::before {
+  background: radial-gradient(circle at 30% 30%, rgba(201, 168, 130, 0.9), transparent 65%);
+  top: -70px;
+  left: -40px;
+  animation: pairing-blob-1 26s ease-in-out infinite;
+}
+
+.pairing-container::after {
+  background: radial-gradient(circle at 70% 70%, rgba(226, 207, 178, 0.85), transparent 65%);
+  bottom: -90px;
+  right: -40px;
+  animation: pairing-blob-2 30s ease-in-out infinite;
+}
+
+/* ===== Card (glass + light tones) ===== */
 
 .pairing-card {
   width: 100%;
-  max-width: 500px;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  max-width: 520px;
+  background:
+    radial-gradient(circle at top left, rgba(247, 239, 225, 0.96), rgba(226, 207, 178, 0.97));
+  border-radius: 20px;
   padding: 40px 35px;
   text-align: left;
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  box-shadow:
+    0 22px 55px rgba(5, 15, 36, 0.55),
+    0 0 0 1px rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(22px) saturate(130%);
+  -webkit-backdrop-filter: blur(22px) saturate(130%);
+  position: relative;
+  overflow: hidden;
+  color: var(--text-main);
+  transform: translateY(8px);
+  opacity: 0;
+  animation: pairing-card-enter 700ms cubic-bezier(0.19, 1, 0.22, 1) forwards;
 }
+
+/* subtle sheen sweep */
+.pairing-card::before {
+  content: "";
+  position: absolute;
+  inset: -40%;
+  background: linear-gradient(
+    120deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.35) 35%,
+    transparent 70%
+  );
+  transform: translateX(-80%);
+  opacity: 0;
+  pointer-events: none;
+  animation: pairing-card-sheen 6s ease-in-out 1.4s infinite;
+}
+
+/* ===== Header ===== */
 
 .pairing-header {
   text-align: center;
-  margin-bottom: 30px;
-  border-bottom: 1px solid #eaeaea;
-  padding-bottom: 20px;
+  margin-bottom: 26px;
+  border-bottom: 1px solid rgba(11, 35, 69, 0.1);
+  padding-bottom: 18px;
 }
 
 .pairing-title {
   font-size: 2rem;
-  font-weight: 300;
-  color: #333;
+  font-weight: 600;
+  color: var(--navy);
   margin: 0;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.6px;
 }
 
 .pairing-subtitle {
-  color: #666;
+  color: var(--text-muted);
   font-size: 0.95rem;
   margin-top: 8px;
-  font-weight: 400;
 }
 
-.pairing-warning {
-  background-color: #fff3cd;
-  border: 1px solid #ffeaa7;
-  border-radius: 8px;
-  padding: 15px;
-  margin-bottom: 25px;
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-}
-
-.warning-icon {
-  font-size: 1.2rem;
-  flex-shrink: 0;
-}
-
-.pairing-warning p {
-  margin: 0;
-  color: #856404;
-  font-size: 0.95rem;
-  line-height: 1.5;
-}
-
-.gender-info {
-  background-color: #e8f4fd;
-  border: 1px solid #b6d4fe;
-  border-radius: 8px;
-  padding: 15px;
-  margin-bottom: 25px;
-}
-
-.gender-info p {
-  margin: 5px 0;
-  color: #084298;
-  font-size: 0.95rem;
-}
-
-.pairing-form {
-  margin: 25px 0;
-}
+/* ===== Alerts ===== */
 
 .error-message {
-  background-color: #fee;
-  color: #c33;
-  padding: 12px;
-  border-radius: 6px;
-  margin-bottom: 20px;
-  font-size: 0.9rem;
-  border: 1px solid #fcc;
+  background-color: var(--danger-bg);
+  color: var(--danger-text);
+  padding: 12px 14px;
+  border-radius: 10px;
+  margin-bottom: 18px;
+  font-size: 0.88rem;
+  border: 1px solid var(--danger-border);
+  backdrop-filter: blur(10px);
 }
 
 .success-message {
-  background-color: #d4edda;
-  color: #155724;
-  padding: 12px;
-  border-radius: 6px;
-  margin-bottom: 20px;
-  font-size: 0.9rem;
-  border: 1px solid #c3e6cb;
+  background-color: var(--success-bg);
+  color: var(--success-text);
+  padding: 12px 14px;
+  border-radius: 10px;
+  margin-bottom: 18px;
+  font-size: 0.88rem;
+  border: 1px solid var(--success-border);
+  backdrop-filter: blur(10px);
+}
+
+/* ===== Form ===== */
+
+.pairing-form {
+  margin: 22px 0;
 }
 
 .form-group {
-  margin-bottom: 25px;
+  margin-bottom: 24px;
 }
 
 .form-group label {
   display: block;
   margin-bottom: 8px;
-  color: #333;
+  color: var(--navy);
   font-weight: 500;
   font-size: 0.95rem;
 }
@@ -115,113 +169,144 @@
 .form-group input {
   width: 100%;
   padding: 12px 16px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
+  border-radius: 10px;
   font-size: 1rem;
-  transition: border-color 0.2s ease;
+  border: 1px solid rgba(11, 35, 69, 0.18);
+  background: rgba(247, 239, 225, 0.8);
+  color: var(--text-main);
+  transition: border-color 0.2s ease, background 0.2s ease,
+              box-shadow 0.2s ease, transform 0.12s ease;
+}
+
+.form-group input::placeholder {
+  color: rgba(107, 114, 128, 0.7);
 }
 
 .form-group input:focus {
   outline: none;
-  border-color: #999;
-  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.05);
+  border-color: var(--navy);
+  background: rgba(255, 255, 255, 0.98);
+  box-shadow:
+    0 0 0 1px rgba(11, 35, 69, 0.18),
+    0 10px 25px rgba(11, 35, 69, 0.16);
+  transform: translateY(-1px);
 }
 
 .form-group input:disabled {
-  background-color: #f5f5f5;
+  background-color: rgba(247, 239, 225, 0.8);
   cursor: not-allowed;
 }
 
 .input-hint {
   margin-top: 8px;
-  color: #666;
-  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-size: 0.8rem;
   font-style: italic;
 }
 
+/* ===== Pairing rules box ===== */
+
 .pairing-rules {
-  background-color: #f8f9fa;
-  border: 1px solid #eaeaea;
-  border-radius: 8px;
-  padding: 20px;
-  margin: 30px 0;
+  background-color: rgba(247, 239, 225, 0.9);
+  border: 1px solid rgba(201, 168, 130, 0.45);
+  border-radius: 12px;
+  padding: 18px 18px 16px;
+  margin: 26px 0;
+  box-shadow: 0 14px 30px rgba(11, 35, 69, 0.08);
 }
 
 .pairing-rules h3 {
   margin-top: 0;
-  margin-bottom: 15px;
-  color: #333;
-  font-size: 1.1rem;
+  margin-bottom: 10px;
+  color: var(--navy);
+  font-size: 1.05rem;
 }
 
 .pairing-rules ul {
   margin: 0;
-  padding-left: 20px;
-  color: #666;
+  padding-left: 18px;
+  color: var(--text-muted);
+  font-size: 0.9rem;
 }
 
 .pairing-rules li {
-  margin-bottom: 8px;
-  line-height: 1.4;
+  margin-bottom: 6px;
+  line-height: 1.45;
 }
 
 .pairing-rules li:last-child {
   margin-bottom: 0;
 }
 
+/* ===== Buttons ===== */
+
 .form-actions {
   display: flex;
-  gap: 15px;
-  margin-top: 30px;
+  gap: 14px;
+  margin-top: 26px;
 }
 
 .cancel-button,
 .pair-button {
   flex: 1;
-  padding: 14px;
+  padding: 13px;
+  border-radius: 999px;
   border: none;
-  border-radius: 6px;
-  font-size: 1rem;
-  font-weight: 500;
+  font-size: 0.98rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
-}
+  transition: transform 0.15s ease, box-shadow 0.2s ease,
+              background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 
-.cancel-button {
-  background-color: #f8f9fa;
-  color: #666;
-  border: 1px solid #ddd;
-}
-
-.cancel-button:hover:not(:disabled) {
-  background-color: #eaeaea;
-  color: #333;
-}
-
-.pair-button {
-  background-color: #2c3e50;
-  color: white;
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-dark) 100%);
+  color: #ffffff;
+  box-shadow: 0 16px 36px rgba(11, 35, 69, 0.35);
 }
 
 .pair-button:hover:not(:disabled) {
-  background-color: #34495e;
+  background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy) 100%);
+  box-shadow: 0 20px 45px rgba(11, 35, 69, 0.5);
+  transform: translateY(-1.5px);
+}
+
+.cancel-button {
+  background: rgba(247, 239, 225, 0.9);
+  color: var(--text-muted);
+  border: 1px solid rgba(11, 35, 69, 0.12);
+}
+
+.cancel-button:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.98);
+  color: var(--navy);
+  box-shadow: 0 10px 24px rgba(11, 35, 69, 0.12);
+  transform: translateY(-1px);
+}
+
+.pair-button {
+  background: linear-gradient(135deg, var(--sand-light), var(--sand));
+  color: var(--navy);
+  box-shadow: 0 16px 36px rgba(11, 35, 69, 0.38);
+}
+
+.pair-button:hover:not(:disabled) {
+  box-shadow: 0 20px 45px rgba(11, 35, 69, 0.5);
+  transform: translateY(-1.5px);
 }
 
 .pair-button:disabled,
 .cancel-button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+  box-shadow: none;
 }
 
-.pair-button:disabled:hover {
-  background-color: #2c3e50;
-}
+/* ===== Optional help section (if enabled in JSX) ===== */
 
 .pairing-help {
-  margin-top: 30px;
-  padding-top: 20px;
-  border-top: 1px solid #eaeaea;
-  color: #666;
+  margin-top: 26px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(11, 35, 69, 0.08);
+  color: var(--text-muted);
 }
 
 .pairing-help p {
@@ -230,28 +315,94 @@
 
 .pairing-help ul {
   margin: 0;
-  padding-left: 20px;
+  padding-left: 18px;
   font-size: 0.9rem;
 }
 
 .pairing-help li {
-  margin-bottom: 5px;
+  margin-bottom: 4px;
 }
+
+/* ===== Debug info block (when visible) ===== */
+
+.debug-info {
+  background-color: rgba(240, 240, 240, 0.9);
+  border: 1px solid rgba(209, 213, 219, 0.9);
+  border-radius: 10px;
+  padding: 12px;
+  margin-bottom: 18px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 0.8rem;
+  color: #4b5563;
+  max-height: 180px;
+  overflow-y: auto;
+}
+
+.debug-info pre {
+  margin: 0;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+/* ===== Animations ===== */
+
+@keyframes pairing-blob-1 {
+  0%   { transform: translate3d(0, 0, 0) scale(1); }
+  50%  { transform: translate3d(18px, 14px, 0) scale(1.03); }
+  100% { transform: translate3d(0, 0, 0) scale(1); }
+}
+
+@keyframes pairing-blob-2 {
+  0%   { transform: translate3d(0, 0, 0) scale(1); }
+  50%  { transform: translate3d(-20px, -12px, 0) scale(1.04); }
+  100% { transform: translate3d(0, 0, 0) scale(1); }
+}
+
+@keyframes pairing-card-enter {
+  0% {
+    opacity: 0;
+    transform: translateY(18px) scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes pairing-card-sheen {
+  0% {
+    opacity: 0;
+    transform: translateX(-80%);
+  }
+  8% {
+    opacity: 0.8;
+  }
+  22% {
+    opacity: 0;
+    transform: translateX(40%);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(40%);
+  }
+}
+
+/* ===== Responsive tweaks ===== */
 
 @media (max-width: 768px) {
   .pairing-card {
-    padding: 30px 25px;
-    margin: 20px;
+    padding: 30px 24px;
+    margin: 18px;
   }
-  
+
   .pairing-title {
     font-size: 1.8rem;
   }
-  
+
   .form-actions {
     flex-direction: column;
   }
-  
+
   .cancel-button,
   .pair-button {
     width: 100%;
@@ -260,35 +411,10 @@
 
 @media (max-width: 480px) {
   .pairing-card {
-    padding: 25px 20px;
+    padding: 24px 18px;
   }
-  
+
   .pairing-title {
     font-size: 1.6rem;
   }
-  
-  .pairing-warning {
-    flex-direction: column;
-    text-align: center;
-  }
-}
-
-/* Debug styles (remove in production) */
-.debug-info {
-  background-color: #f0f0f0;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 15px;
-  margin-bottom: 20px;
-  font-family: monospace;
-  font-size: 0.85rem;
-  color: #666;
-  max-height: 200px;
-  overflow-y: auto;
-}
-
-.debug-info pre {
-  margin: 0;
-  white-space: pre-wrap;
-  word-wrap: break-word;
 }

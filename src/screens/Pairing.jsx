@@ -106,7 +106,7 @@ const Pairing = () => {
     return (
       <div className="pairing-container">
         <div className="pairing-card">
-          <div className="pairing-header">
+          <div className="pairing-header">~
             <h1 className="pairing-title">Loading...</h1>
           </div>
           <div className="debug-info">
@@ -183,16 +183,6 @@ const Pairing = () => {
             </p>
           </div>
 
-          <div className="pairing-rules">
-            <h3>Pairing Rules:</h3>
-            <ul>
-              <li>Username must exist</li>
-              <li>Must be opposite gender</li>
-              <li>Both users must be unpaired</li>
-              <li>Cannot pair with same person again</li>
-              <li>No unpairing or changes allowed</li>
-            </ul>
-          </div>
 
           <div className="form-actions">
             <button
