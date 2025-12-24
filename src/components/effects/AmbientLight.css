@@ -1,0 +1,212 @@
+.ambient-light-debug {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  background: rgba(0, 0, 0, 0.7);
+  color: #FFD700;
+  padding: 10px;
+  border-radius: 5px;
+  font-family: monospace;
+  font-size: 12px;
+  pointer-events: none;
+  z-index: 10000;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+.light-intensity-slider {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 200px;
+  background: rgba(0, 0, 0, 0.8);
+  padding: 15px;
+  border-radius: 10px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 215, 0, 0.2);
+  z-index: 1000;
+}
+
+.light-intensity-slider label {
+  display: block;
+  color: #FFD700;
+  margin-bottom: 10px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+}
+
+.light-intensity-slider input[type="range"] {
+  width: 100%;
+  height: 4px;
+  -webkit-appearance: none;
+  background: linear-gradient(to right, #000, #FFD700);
+  border-radius: 2px;
+  outline: none;
+}
+
+.light-intensity-slider input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #FFD700;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+.light-intensity-slider input[type="range"]::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #FFD700;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+.light-preset-buttons {
+  position: fixed;
+  bottom: 100px;
+  right: 20px;
+  display: flex;
+  gap: 10px;
+  z-index: 1000;
+}
+
+.light-preset-button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  background: var(--preset-color);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.light-preset-button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 20px var(--preset-color);
+}
+
+.light-preset-button.active {
+  border-color: #FFD700;
+  box-shadow: 0 0 20px #FFD700;
+}
+
+/* Performance warning for volumetric lights */
+.performance-warning-light {
+  position: fixed;
+  top: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255, 107, 107, 0.9);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  text-align: center;
+  z-index: 10000;
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateX(-50%) translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Light state indicators */
+.light-state-indicator {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  z-index: 1000;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+.light-state-indicator.frost {
+  background: rgba(160, 210, 255, 0.2);
+  color: #A0D2FF;
+}
+
+.light-state-indicator.warm {
+  background: rgba(255, 215, 0, 0.2);
+  color: #FFD700;
+}
+
+.light-state-indicator.pulsing {
+  background: rgba(255, 107, 107, 0.2);
+  color: #FF6B6B;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.light-state-indicator.unlockable {
+  background: rgba(255, 215, 0, 0.3);
+  color: #FFD700;
+  animation: rainbow 3s linear infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
+}
+
+@keyframes rainbow {
+  0% { color: #FF0000; border-color: rgba(255, 0, 0, 0.3); }
+  16% { color: #FF8000; border-color: rgba(255, 128, 0, 0.3); }
+  33% { color: #FFFF00; border-color: rgba(255, 255, 0, 0.3); }
+  50% { color: #00FF00; border-color: rgba(0, 255, 0, 0.3); }
+  66% { color: #0000FF; border-color: rgba(0, 0, 255, 0.3); }
+  83% { color: #8000FF; border-color: rgba(128, 0, 255, 0.3); }
+  100% { color: #FF0000; border-color: rgba(255, 0, 0, 0.3); }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .light-intensity-slider {
+    width: 150px;
+    bottom: 10px;
+    right: 10px;
+    padding: 10px;
+  }
+  
+  .light-preset-buttons {
+    bottom: 80px;
+    right: 10px;
+  }
+  
+  .light-preset-button {
+    width: 35px;
+    height: 35px;
+  }
+  
+  .light-state-indicator {
+    top: 10px;
+    right: 10px;
+    font-size: 0.7rem;
+    padding: 6px 12px;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .light-state-indicator.pulsing,
+  .light-state-indicator.unlockable {
+    animation: none;
+  }
+  
+  .performance-warning-light {
+    animation: none;
+  }
+}

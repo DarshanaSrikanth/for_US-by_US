@@ -241,16 +241,7 @@ const Home = () => {
                 Find a Partner
               </button>
               
-              <div className="state-instructions">
-                <h3>How it works:</h3>
-                <ol>
-                  <li>Pair with your partner (permanent)</li>
-                  <li>Start a chest with a time lock</li>
-                  <li>Write chits with emotions</li>
-                  <li>Wait for the chest to unlock</li>
-                  <li>Read each other's chits thoughtfully</li>
-                </ol>
-              </div>
+              
             </div>
           </div>
         )}
@@ -258,19 +249,14 @@ const Home = () => {
         {/* State B: Paired, No Active Chest */}
         {screenState === 'B' && (
           <div className="home-state-b">
-            <div className="state-header">
-              <h2>Welcome back, {profile?.username}</h2>
-              <p>Paired with: <strong>{partnerInfo?.username}</strong></p>
-            </div>
+            
             
             <div className="state-content">
               <ChestVisual state="closed" />
               
               <div className="state-message">
                 <p>No active chest. Start a new one to begin sharing.</p>
-                <p className="settings-note">
-                  Current settings: Chest duration is <strong>{settings?.chestDuration} days</strong>
-                </p>
+                
               </div>
               
               <div className="action-buttons">
@@ -297,29 +283,7 @@ const Home = () => {
                 </button>
               </div>
               
-              {partnerInfo && (
-                <div className="partner-info-card">
-                  <h3>Your Partner</h3>
-                  <div className="partner-details">
-                    <div className="partner-detail">
-                      <span>Username:</span>
-                      <strong>{partnerInfo.username}</strong>
-                    </div>
-                    <div className="partner-detail">
-                      <span>Gender:</span>
-                      <strong>{partnerInfo.gender}</strong>
-                    </div>
-                    <div className="partner-detail">
-                      <span>Paired since:</span>
-                      <strong>
-                        {partnerInfo.pairedSince 
-                          ? new Date(partnerInfo.pairedSince).toLocaleDateString() 
-                          : 'Recently'}
-                      </strong>
-                    </div>
-                  </div>
-                </div>
-              )}
+              
             </div>
           </div>
         )}
@@ -408,13 +372,6 @@ const Home = () => {
             <div className="state-content">
               <ChestVisual state="unlocked" />
               
-              <div className="unlock-message">
-                <div className="unlock-icon">🔓</div>
-                <h3>Chest has unlocked!</h3>
-                <p>You can now read your partner's chits.</p>
-                <p className="note">Take your time and read thoughtfully.</p>
-              </div>
-              
               <div className="action-buttons">
                 <button 
                   className="action-button primary large"
@@ -424,15 +381,6 @@ const Home = () => {
                 </button>
               </div>
               
-              <div className="guidance-note">
-                <h4>Reading Guidance:</h4>
-                <ul>
-                  <li>Read chits one at a time, in order</li>
-                  <li>Take deep breaths between chits</li>
-                  <li>Scroll down for calming guidance</li>
-                  <li>No reactions required immediately</li>
-                </ul>
-              </div>
             </div>
           </div>
         )}
@@ -450,11 +398,7 @@ const Home = () => {
         )}
       </main>
       
-      <footer className="home-footer">
-        <p className="footer-note">
-          The Chest • Thoughtful emotional sharing • {new Date().getFullYear()}
-        </p>
-      </footer>
+      
     </div>
   );
 };

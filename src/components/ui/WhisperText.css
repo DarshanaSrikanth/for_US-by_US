@@ -1,0 +1,438 @@
+/* Whisper Text Container */
+.whisper-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 100;
+  width: 90%;
+  max-width: 600px;
+  text-align: center;
+}
+
+.whisper-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.5rem;
+  font-weight: 300;
+  font-style: italic;
+  color: #FFD700;
+  text-shadow: 
+    0 0 20px rgba(255, 215, 0, 0.5),
+    0 0 40px rgba(255, 215, 0, 0.3),
+    0 0 60px rgba(255, 215, 0, 0.1);
+  line-height: 1.4;
+  margin: 0;
+  padding: 30px;
+  background: rgba(11, 15, 26, 0.7);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 215, 0, 0.2);
+  border-radius: 20px;
+  animation: 
+    whisperFloat 3s ease-in-out infinite,
+    textShimmer 2s ease-in-out infinite;
+  position: relative;
+  overflow: hidden;
+}
+
+.whisper-text::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    45deg,
+    transparent 30%,
+    rgba(255, 215, 0, 0.1) 50%,
+    transparent 70%
+  );
+  animation: shine 3s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes whisperFloat {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(0.5deg);
+  }
+}
+
+@keyframes textShimmer {
+  0%, 100% {
+    text-shadow: 
+      0 0 20px rgba(255, 215, 0, 0.5),
+      0 0 40px rgba(255, 215, 0, 0.3),
+      0 0 60px rgba(255, 215, 0, 0.1);
+  }
+  50% {
+    text-shadow: 
+      0 0 30px rgba(255, 215, 0, 0.7),
+      0 0 60px rgba(255, 215, 0, 0.5),
+      0 0 90px rgba(255, 215, 0, 0.2);
+  }
+}
+
+@keyframes shine {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Typewriter cursor */
+.typewriter-cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1.2em;
+  background: #FFD700;
+  margin-left: 2px;
+  animation: cursorBlink 1s infinite;
+  vertical-align: middle;
+}
+
+@keyframes cursorBlink {
+  0%, 50% {
+    opacity: 1;
+  }
+  51%, 100% {
+    opacity: 0;
+  }
+}
+
+/* Whisper Particles */
+.whisper-particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: #FFD700;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: particleFloat 3s ease-in-out infinite;
+}
+
+@keyframes particleFloat {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--tx, 100px), var(--ty, -100px)) scale(0);
+    opacity: 0;
+  }
+}
+
+/* State-specific styles */
+.whisper-text.state-a {
+  color: #A0D2FF;
+  text-shadow: 
+    0 0 20px rgba(160, 210, 255, 0.5),
+    0 0 40px rgba(160, 210, 255, 0.3);
+  border-color: rgba(160, 210, 255, 0.3);
+}
+
+.whisper-text.state-b {
+  color: #FFD700;
+  text-shadow: 
+    0 0 20px rgba(255, 215, 0, 0.5),
+    0 0 40px rgba(255, 215, 0, 0.3);
+  border-color: rgba(255, 215, 0, 0.3);
+}
+
+.whisper-text.state-c {
+  color: #FF6B6B;
+  text-shadow: 
+    0 0 20px rgba(255, 107, 107, 0.5),
+    0 0 40px rgba(255, 107, 107, 0.3);
+  border-color: rgba(255, 107, 107, 0.3);
+  animation: pulseText 2s ease-in-out infinite;
+}
+
+.whisper-text.state-d {
+  color: #00FFAA;
+  text-shadow: 
+    0 0 20px rgba(0, 255, 170, 0.5),
+    0 0 40px rgba(0, 255, 170, 0.3);
+  border-color: rgba(0, 255, 170, 0.3);
+  animation: rainbowText 3s linear infinite;
+}
+
+@keyframes pulseText {
+  0%, 100% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes rainbowText {
+  0% {
+    color: #FF0000;
+    border-color: rgba(255, 0, 0, 0.3);
+  }
+  16% {
+    color: #FF8000;
+    border-color: rgba(255, 128, 0, 0.3);
+  }
+  33% {
+    color: #FFFF00;
+    border-color: rgba(255, 255, 0, 0.3);
+  }
+  50% {
+    color: #00FF00;
+    border-color: rgba(0, 255, 0, 0.3);
+  }
+  66% {
+    color: #0000FF;
+    border-color: rgba(0, 0, 255, 0.3);
+  }
+  83% {
+    color: #8000FF;
+    border-color: rgba(128, 0, 255, 0.3);
+  }
+  100% {
+    color: #FF0000;
+    border-color: rgba(255, 0, 0, 0.3);
+  }
+}
+
+/* Interactive hint */
+.whisper-hint {
+  position: absolute;
+  top: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: rgba(255, 215, 0, 0.7);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  padding: 8px 16px;
+  background: rgba(11, 15, 26, 0.8);
+  border: 1px solid rgba(255, 215, 0, 0.2);
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  animation: hintFloat 2s ease-in-out infinite;
+  white-space: nowrap;
+}
+
+@keyframes hintFloat {
+  0%, 100% {
+    transform: translateX(-50%) translateY(0);
+  }
+  50% {
+    transform: translateX(-50%) translateY(-5px);
+  }
+}
+
+/* Whisper Controls */
+.whisper-controls {
+  position: fixed;
+  bottom: 250px;
+  right: 20px;
+  background: rgba(11, 15, 26, 0.9);
+  padding: 20px;
+  border-radius: 12px;
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 215, 0, 0.2);
+  z-index: 1000;
+  min-width: 200px;
+}
+
+.whisper-controls h3 {
+  color: #FFD700;
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  margin: 0 0 15px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.whisper-controls h3::before {
+  content: '💭';
+  font-size: 1.2rem;
+}
+
+.whisper-input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  background: rgba(27, 32, 46, 0.7);
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  border-radius: 8px;
+  color: #FFD700;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem;
+  resize: vertical;
+  min-height: 60px;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.whisper-input:focus {
+  border-color: #FFD700;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
+}
+
+.whisper-button {
+  width: 100%;
+  padding: 12px;
+  background: rgba(255, 215, 0, 0.2);
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  border-radius: 8px;
+  color: #FFD700;
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.whisper-button:hover {
+  background: rgba(255, 215, 0, 0.3);
+  transform: translateY(-1px);
+}
+
+/* Whisper History */
+.whisper-history {
+  position: fixed;
+  top: 80px;
+  left: 20px;
+  background: rgba(11, 15, 26, 0.9);
+  padding: 20px;
+  border-radius: 12px;
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 215, 0, 0.2);
+  z-index: 1000;
+  max-width: 300px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.whisper-history h3 {
+  color: #FFD700;
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  margin: 0 0 15px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.whisper-history h3::before {
+  content: '📜';
+  font-size: 1.2rem;
+}
+
+.history-item {
+  padding: 10px;
+  margin-bottom: 10px;
+  background: rgba(27, 32, 46, 0.5);
+  border-radius: 8px;
+  border-left: 3px solid #FFD700;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.4;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.history-item:hover {
+  background: rgba(27, 32, 46, 0.7);
+  transform: translateX(5px);
+}
+
+.history-item .timestamp {
+  display: block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  color: rgba(255, 215, 0, 0.6);
+  margin-top: 5px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .whisper-text {
+    font-size: 1.8rem;
+    padding: 20px;
+  }
+  
+  .whisper-container {
+    width: 95%;
+  }
+  
+  .whisper-controls {
+    bottom: 200px;
+    right: 10px;
+    left: 10px;
+    min-width: auto;
+  }
+  
+  .whisper-history {
+    top: 70px;
+    left: 10px;
+    right: 10px;
+    max-width: none;
+  }
+  
+  .whisper-hint {
+    font-size: 0.8rem;
+    padding: 6px 12px;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .whisper-text,
+  .whisper-hint,
+  .history-item,
+  .typewriter-cursor {
+    animation: none !important;
+  }
+  
+  .whisper-particle {
+    animation: none;
+    opacity: 0;
+  }
+  
+  .whisper-button:hover,
+  .history-item:hover {
+    transform: none;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .whisper-container {
+    position: static;
+    transform: none;
+  }
+  
+  .whisper-text {
+    background: white;
+    color: black;
+    text-shadow: none;
+    border: 1px solid #ccc;
+  }
+  
+  .whisper-controls,
+  .whisper-history,
+  .whisper-hint {
+    display: none;
+  }
+}

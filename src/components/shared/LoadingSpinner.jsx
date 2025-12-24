@@ -1,7 +1,7 @@
 import React from 'react';
 import './LoadingSpinner.css';
 
-const LoadingSpinner = ({ size = 'medium', text = 'Loading...' }) => {
+const LoadingSpinner = ({ size = 'medium', text = ' Loading...' }) => {
   const sizeClass = `spinner-${size}`;
   
   return (

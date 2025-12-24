@@ -1,0 +1,429 @@
+/* Transition Overlay Container */
+.transition-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 9999;
+  overflow: hidden;
+}
+
+.transition-canvas {
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  animation: transitionFadeIn 0.3s ease forwards;
+}
+
+@keyframes transitionFadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+/* Loading Screen Transition */
+.loading-transition {
+  background: linear-gradient(
+    135deg,
+    #0b0f1a 0%,
+    #121826 50%,
+    #0b0f1a 100%
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loading-spinner {
+  width: 60px;
+  height: 60px;
+  border: 3px solid rgba(255, 215, 0, 0.3);
+  border-top: 3px solid #FFD700;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Chest Opening Specific */
+.chest-opening-overlay {
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 215, 0, 0.1) 0%,
+    rgba(11, 15, 26, 0.9) 70%
+  );
+}
+
+.chest-opening-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 3rem;
+  color: #FFD700;
+  text-shadow: 
+    0 0 30px rgba(255, 215, 0, 0.7),
+    0 0 60px rgba(255, 215, 0, 0.5);
+  opacity: 0;
+  animation: 
+    textReveal 0.5s ease 0.3s forwards,
+    textGlow 2s ease-in-out infinite;
+}
+
+@keyframes textReveal {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes textGlow {
+  0%, 100% {
+    text-shadow: 
+      0 0 30px rgba(255, 215, 0, 0.7),
+      0 0 60px rgba(255, 215, 0, 0.5);
+  }
+  50% {
+    text-shadow: 
+      0 0 40px rgba(255, 215, 0, 0.9),
+      0 0 80px rgba(255, 215, 0, 0.7),
+      0 0 120px rgba(255, 215, 0, 0.4);
+  }
+}
+
+/* Error Transition */
+.error-transition {
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 107, 107, 0.2) 0%,
+    rgba(11, 15, 26, 0.95) 70%
+  );
+}
+
+.error-glitch {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 2.5rem;
+  color: #FF6B6B;
+  animation: glitch 0.3s infinite;
+}
+
+@keyframes glitch {
+  0% {
+    transform: translate(-50%, -50%) translate(0);
+    text-shadow: 
+      2px 0 #FF6B6B,
+      -2px 0 #6B6BFF;
+  }
+  25% {
+    transform: translate(-50%, -50%) translate(-2px, 2px);
+    text-shadow: 
+      -2px 0 #FF6B6B,
+      2px 0 #6B6BFF;
+  }
+  50% {
+    transform: translate(-50%, -50%) translate(2px, -2px);
+    text-shadow: 
+      2px 0 #6B6BFF,
+      -2px 0 #FF6B6B;
+  }
+  75% {
+    transform: translate(-50%, -50%) translate(-2px, 2px);
+    text-shadow: 
+      -2px 0 #6B6BFF,
+      2px 0 #FF6B6B;
+  }
+  100% {
+    transform: translate(-50%, -50%) translate(0);
+    text-shadow: 
+      2px 0 #FF6B6B,
+      -2px 0 #6B6BFF;
+  }
+}
+
+/* Scene Change */
+.scene-change-overlay {
+  background: linear-gradient(
+    45deg,
+    rgba(0, 255, 170, 0.1) 0%,
+    rgba(107, 107, 255, 0.1) 50%,
+    rgba(255, 215, 0, 0.1) 100%
+  );
+}
+
+.scene-change-loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100px;
+  height: 100px;
+}
+
+.scene-change-loader div {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border: 4px solid transparent;
+  border-top-color: #00FFAA;
+  border-radius: 50%;
+  animation: sceneSpin 2s linear infinite;
+}
+
+.scene-change-loader div:nth-child(2) {
+  border-top-color: #6B6BFF;
+  animation-delay: 0.5s;
+}
+
+.scene-change-loader div:nth-child(3) {
+  border-top-color: #FFD700;
+  animation-delay: 1s;
+}
+
+@keyframes sceneSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* State Change */
+.state-change-overlay {
+  background: radial-gradient(
+    circle at center,
+    rgba(160, 210, 255, 0.1) 0%,
+    rgba(11, 15, 26, 0.95) 70%
+  );
+}
+
+.state-change-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 4rem;
+  color: #A0D2FF;
+  animation: statePulse 1.5s ease-in-out infinite;
+}
+
+@keyframes statePulse {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.7;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.2);
+    opacity: 1;
+  }
+}
+
+/* Progress Indicator */
+.transition-progress {
+  position: absolute;
+  bottom: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 300px;
+  text-align: center;
+}
+
+.transition-progress-bar {
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.transition-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, 
+    #FFD700 0%, 
+    #6B6BFF 50%, 
+    #00FFAA 100%);
+  border-radius: 2px;
+  transition: width 0.1s linear;
+}
+
+.transition-progress-text {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Skip Button */
+.skip-transition {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  padding: 8px 16px;
+  background: rgba(11, 15, 26, 0.7);
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  border-radius: 20px;
+  color: rgba(255, 215, 0, 0.7);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+  pointer-events: all;
+}
+
+.skip-transition:hover {
+  background: rgba(255, 215, 0, 0.2);
+  color: #FFD700;
+  border-color: #FFD700;
+  transform: translateY(-1px);
+}
+
+/* Performance Warning */
+.transition-warning {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255, 107, 107, 0.9);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  text-align: center;
+  backdrop-filter: blur(10px);
+  animation: warningSlide 0.5s ease;
+}
+
+@keyframes warningSlide {
+  from {
+    transform: translateX(-50%) translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Transition Controls */
+.transition-controls {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(11, 15, 26, 0.8);
+  padding: 15px;
+  border-radius: 12px;
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 215, 0, 0.2);
+  min-width: 200px;
+}
+
+.transition-controls h3 {
+  color: #FFD700;
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  margin: 0 0 15px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.transition-controls h3::before {
+  content: '⚡';
+  font-size: 1.2rem;
+}
+
+.transition-slider {
+  width: 100%;
+  margin: 10px 0;
+}
+
+.transition-slider label {
+  display: block;
+  color: rgba(255, 255, 255, 0.8);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  margin-bottom: 5px;
+}
+
+.transition-slider input[type="range"] {
+  width: 100%;
+  height: 4px;
+  -webkit-appearance: none;
+  background: linear-gradient(to right, #000, #FFD700);
+  border-radius: 2px;
+  outline: none;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .chest-opening-text {
+    font-size: 2rem;
+  }
+  
+  .error-glitch {
+    font-size: 1.8rem;
+  }
+  
+  .transition-progress {
+    width: 250px;
+    bottom: 30px;
+  }
+  
+  .skip-transition {
+    bottom: 10px;
+    right: 10px;
+    padding: 6px 12px;
+    font-size: 0.8rem;
+  }
+  
+  .transition-controls {
+    top: 10px;
+    right: 10px;
+    padding: 12px;
+    min-width: 180px;
+  }
+}
+
+@media (max-width: 480px) {
+  .chest-opening-text {
+    font-size: 1.5rem;
+  }
+  
+  .error-glitch {
+    font-size: 1.3rem;
+  }
+  
+  .transition-progress {
+    width: 200px;
+  }
+  
+  .scene-change-loader {
+    width: 70px;
+    height: 70px;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .transition-canvas,
+  .loading-spinner,
+  .chest-opening-text,
+  .error-glitch,
+  .scene-change-loader div,
+  .state-change-icon,
+  .skip-transition,
+  .transition-warning {
+    animation: none !important;
+  }
+  
+  .skip-transition:hover {
+    transform: none;
+  }
+}

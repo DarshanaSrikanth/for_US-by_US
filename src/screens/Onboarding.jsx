@@ -65,6 +65,16 @@ const Onboarding = () => {
 
   return (
     <div className="onboarding-container">
+      <video
+        className="bg-video"
+        autoPlay
+        loop
+        muted
+        playsInline
+      >
+        <source src="/videos/onboarding-bg.mp4" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
       <div className="onboarding-card">
         {/* <div className="app-header">
           <h1 className="app-title">The Chest</h1>

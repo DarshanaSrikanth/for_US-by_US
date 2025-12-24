@@ -1,0 +1,456 @@
+
+/* Time Display Container */
+.time-display-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 150;
+  width: 400px;
+  height: 400px;
+}
+
+.time-display-canvas {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 0 30px rgba(255, 215, 0, 0.3));
+}
+
+/* Overlay Digital Display */
+.time-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  pointer-events: none;
+}
+
+.time-digits {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 3.5rem;
+  font-weight: 700;
+  color: #FFD700;
+  text-shadow: 
+    0 0 20px rgba(255, 215, 0, 0.7),
+    0 0 40px rgba(255, 215, 0, 0.5),
+    0 0 60px rgba(255, 215, 0, 0.3);
+  margin: 0;
+  animation: timePulse 2s ease-in-out infinite;
+}
+
+.time-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  color: rgba(255, 215, 0, 0.7);
+  margin-top: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+@keyframes timePulse {
+  0%, 100% {
+    text-shadow: 
+      0 0 20px rgba(255, 215, 0, 0.7),
+      0 0 40px rgba(255, 215, 0, 0.5),
+      0 0 60px rgba(255, 215, 0, 0.3);
+  }
+  50% {
+    text-shadow: 
+      0 0 30px rgba(255, 215, 0, 0.9),
+      0 0 60px rgba(255, 215, 0, 0.7),
+      0 0 90px rgba(255, 215, 0, 0.4);
+  }
+}
+
+/* Progress Bar */
+.time-progress-container {
+  position: absolute;
+  bottom: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 300px;
+}
+
+.time-progress-bar {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 215, 0, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+  position: relative;
+}
+
+.time-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, 
+    #FF6B6B 0%, 
+    #FFA500 50%, 
+    #FFD700 100%);
+  border-radius: 3px;
+  transition: width 0.5s ease;
+  position: relative;
+}
+
+.time-progress-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.3) 50%,
+    transparent 100%
+  );
+  animation: progressShine 2s ease-in-out infinite;
+}
+
+@keyframes progressShine {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.time-progress-text {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.9rem;
+  color: #FFD700;
+  margin-top: 8px;
+  text-align: center;
+}
+
+/* Urgency Indicators */
+.urgency-indicator {
+  position: absolute;
+  top: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  animation: urgencyPulse 1s ease-in-out infinite;
+}
+
+.urgency-indicator.normal {
+  background: rgba(255, 215, 0, 0.2);
+  color: #FFD700;
+  border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+.urgency-indicator.urgent {
+  background: rgba(255, 107, 107, 0.3);
+  color: #FF6B6B;
+  border: 1px solid rgba(255, 107, 107, 0.5);
+  animation: urgentPulse 0.5s ease-in-out infinite;
+}
+
+.urgency-indicator.critical {
+  background: rgba(255, 107, 107, 0.5);
+  color: #FF6B6B;
+  border: 1px solid rgba(255, 107, 107, 0.8);
+  animation: criticalPulse 0.3s ease-in-out infinite;
+}
+
+@keyframes urgencyPulse {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; }
+}
+
+@keyframes urgentPulse {
+  0%, 100% { 
+    opacity: 0.8;
+    transform: translateX(-50%) scale(1);
+  }
+  50% { 
+    opacity: 1;
+    transform: translateX(-50%) scale(1.05);
+  }
+}
+
+@keyframes criticalPulse {
+  0%, 100% { 
+    opacity: 0.9;
+    transform: translateX(-50%) scale(1);
+    box-shadow: 0 0 20px rgba(255, 107, 107, 0.5);
+  }
+  50% { 
+    opacity: 1;
+    transform: translateX(-50%) scale(1.1);
+    box-shadow: 0 0 40px rgba(255, 107, 107, 0.8);
+  }
+}
+
+/* Time Control Panel */
+.time-control-panel {
+  position: fixed;
+  bottom: 300px;
+  right: 20px;
+  background: rgba(11, 15, 26, 0.9);
+  padding: 20px;
+  border-radius: 12px;
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 215, 0, 0.2);
+  z-index: 1000;
+  min-width: 250px;
+}
+
+.time-control-panel h3 {
+  color: #FFD700;
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  margin: 0 0 15px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.time-control-panel h3::before {
+  content: '⏰';
+  font-size: 1.2rem;
+}
+
+.time-input-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.time-input {
+  text-align: center;
+  padding: 10px;
+  background: rgba(27, 32, 46, 0.7);
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  border-radius: 8px;
+  color: #FFD700;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.2rem;
+  outline: none;
+}
+
+.time-input:focus {
+  border-color: #FFD700;
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+}
+
+.time-input-label {
+  display: block;
+  text-align: center;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.7rem;
+  color: rgba(255, 215, 0, 0.7);
+  margin-top: 4px;
+}
+
+.time-control-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.time-button {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.time-button.primary {
+  background: rgba(255, 215, 0, 0.2);
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  color: #FFD700;
+}
+
+.time-button.secondary {
+  background: rgba(107, 107, 255, 0.2);
+  border: 1px solid rgba(107, 107, 255, 0.3);
+  color: #6B6BFF;
+}
+
+.time-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Time Presets */
+.time-presets {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.time-preset {
+  padding: 8px;
+  background: rgba(27, 32, 46, 0.5);
+  border: 1px solid rgba(255, 215, 0, 0.2);
+  border-radius: 6px;
+  color: rgba(255, 215, 0, 0.8);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.time-preset:hover {
+  background: rgba(27, 32, 46, 0.7);
+  border-color: #FFD700;
+}
+
+.time-preset.active {
+  background: rgba(255, 215, 0, 0.2);
+  border-color: #FFD700;
+  color: #FFD700;
+}
+
+/* Time Visualization Guide */
+.time-visualization-guide {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  background: rgba(11, 15, 26, 0.9);
+  padding: 20px;
+  border-radius: 12px;
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 215, 0, 0.2);
+  z-index: 1000;
+  max-width: 300px;
+}
+
+.time-visualization-guide h3 {
+  color: #FFD700;
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  margin: 0 0 15px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.time-visualization-guide h3::before {
+  content: '📊';
+  font-size: 1.2rem;
+}
+
+.visualization-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.visualization-color {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+}
+
+.visualization-color.days {
+  background: #4CAF50;
+}
+
+.visualization-color.hours {
+  background: #FFD700;
+}
+
+.visualization-color.minutes {
+  background: #FF6B6B;
+}
+
+.visualization-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .time-display-container {
+    width: 300px;
+    height: 300px;
+  }
+  
+  .time-digits {
+    font-size: 2.5rem;
+  }
+  
+  .time-progress-container {
+    width: 250px;
+    bottom: -50px;
+  }
+  
+  .time-control-panel {
+    bottom: 250px;
+    right: 10px;
+    left: 10px;
+    min-width: auto;
+  }
+  
+  .time-input-group {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .time-visualization-guide {
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    max-width: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .time-display-container {
+    width: 250px;
+    height: 250px;
+  }
+  
+  .time-digits {
+    font-size: 2rem;
+  }
+  
+  .time-presets {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .time-digits,
+  .urgency-indicator,
+  .time-progress-fill::after {
+    animation: none !important;
+  }
+  
+  .time-button:hover,
+  .time-preset:hover {
+    transform: none;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .time-display-container,
+  .time-control-panel,
+  .time-visualization-guide {
+    display: none;
+  }
+}

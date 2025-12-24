@@ -95,6 +95,7 @@
   overflow: hidden;
   color: var(--text-main);
   animation: card-enter 0.8s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+  margin-left: 800px;
 }
 
 /* Subtle sheen effect on card */
@@ -478,4 +479,27 @@
   .submit-button {
     width: 85%;
   }
+}
+
+/* Background video */
+.bg-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.video-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    145deg,
+    rgba(5, 15, 36, 0.88),
+    rgba(11, 35, 69, 0.85),
+    rgba(5, 15, 36, 0.9)
+  );
+  z-index: 1;
 }

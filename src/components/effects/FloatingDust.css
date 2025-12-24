@@ -1,0 +1,25 @@
+.floating-dust-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.floating-dust-canvas {
+  opacity: 0;
+  animation: dustFadeIn 2s ease forwards;
+}
+
+@keyframes dustFadeIn {
+  to { opacity: 0.7; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .floating-dust-canvas {
+    opacity: 0.3;
+    animation: none;
+  }
+}
