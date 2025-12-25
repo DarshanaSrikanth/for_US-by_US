@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,useLocation  } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { getActiveChest, checkChestUnlockable, createChest, canStartNewChest, getChestHistory } from '../services/chest';
 import { getPartnerInfo } from '../services/pairing';
@@ -8,6 +8,7 @@ import { getChitsHistory } from '../services/chits';
 import Header from '../components/shared/Header';
 import LoadingSpinner from '../components/shared/LoadingSpinner';
 import './Home.css';
+
 
 const isDev = true;
 
@@ -656,6 +657,7 @@ const FloatingChitsBackground = ({ count = 15 }) => {
 
 const Home = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { user, profile } = useAuth();
   
   const [loading, setLoading] = useState(true);
@@ -682,76 +684,110 @@ const Home = () => {
     }
   }, [user, profile]);
 
-  const loadHomeData = async () => {
-    if (!user || !profile) return;
-
-    try {
-      setLoading(true);
-      setError('');
-
-      // Load partner info
-      if (profile.pairedUserId) {
-        const partner = await getPartnerInfo(profile.pairedUserId);
-        setPartnerInfo(partner);
-      }
-
-      // Load user settings
-      const userSettings = await getUserSettings(user.uid);
-      setSettings(userSettings);
-
-      // Load chest history
-      const history = await getChestHistory(user.uid);
-      setChestHistory(history);
-
-      // Load chits history
-      const chits = await getChitsHistory(user.uid);
-      setChitsHistory(chits);
-
-      // Calculate connection strength based on history
-      if (chits.length > 0) {
-        const totalChits = chits.reduce((sum, chest) => sum + chest.chits.length, 0);
-        const recentChits = chits.slice(0, 3).reduce((sum, chest) => sum + chest.chits.length, 0);
-        setConnectionStrength(Math.min(Math.max(totalChits / 10 + recentChits / 5, 1), 5));
-      }
-
-      // Check for active chest
-      if (profile.pairedUserId) {
-        const activeChest = await getActiveChest(user.uid, profile.pairedUserId);
+  // Add this useEffect to handle location state
+  useEffect(() => {
+    const handleLocationState = async () => {
+      // Check if we came from ReadChest with a chestCompleted message
+      if (location.state?.chestCompleted || location.state?.message?.includes('empty')) {
+        console.log('Returned from reading chest, refreshing data...');
+        // Force reload data to update state
+        await loadHomeData();
         
-        if (activeChest) {
-          setChestData(activeChest);
+        // Clear location state to prevent infinite loops
+        navigate(location.pathname, { replace: true, state: {} });
+      }
+    };
+    
+    if (!loading) {
+      handleLocationState();
+    }
+  }, [location.state, loading]);
+
+// In Home.jsx, update the loadHomeData function:
+
+const loadHomeData = async () => {
+  if (!user || !profile) return;
+
+  try {
+    setLoading(true);
+    setError('');
+
+    // Load partner info
+    if (profile.pairedUserId) {
+      const partner = await getPartnerInfo(profile.pairedUserId);
+      setPartnerInfo(partner);
+    }
+
+    // Load user settings
+    const userSettings = await getUserSettings(user.uid);
+    setSettings(userSettings);
+
+    // Load chest history
+    const history = await getChestHistory(user.uid);
+    setChestHistory(history);
+
+    // Load chits history
+    const chits = await getChitsHistory(user.uid);
+    setChitsHistory(chits);
+
+    // Calculate connection strength based on history
+    if (chits.length > 0) {
+      const totalChits = chits.reduce((sum, chest) => sum + chest.chits.length, 0);
+      const recentChits = chits.slice(0, 3).reduce((sum, chest) => sum + chest.chits.length, 0);
+      setConnectionStrength(Math.min(Math.max(totalChits / 10 + recentChits / 5, 1), 5));
+    }
+
+    // Check for active chest
+    if (profile.pairedUserId) {
+      const activeChest = await getActiveChest(user.uid, profile.pairedUserId);
+      
+      if (activeChest) {
+        setChestData(activeChest);
+        
+        // Check if chest is unlockable
+        const unlockCheck = await checkChestUnlockable(activeChest.id);
+        setUnlockInfo(unlockCheck);
+        
+        // Determine screen state based ONLY on chest status
+        if (activeChest.status === 'active') {
+          setScreenState('C'); // Active chest, locked
+        } else if (activeChest.status === 'unlockable' || unlockCheck.isUnlockable) {
+          setScreenState('D'); // Chest unlockable
+        } else if (activeChest.status === 'completed') {
+          setScreenState('B'); // Chest completed, can start new one
+        } else if (activeChest.status === 'opened') {
+          // For opened chests, check if we need to mark as completed
+          const partnerChits = await getChitsForChest(activeChest.id, profile.pairedUserId);
+          const unreadChits = partnerChits.filter(chit => !chit.isRead);
           
-          // Check if chest is unlockable
-          const unlockCheck = await checkChestUnlockable(activeChest.id);
-          setUnlockInfo(unlockCheck);
-          
-          // Determine screen state
-          if (activeChest.status === 'active') {
-            setScreenState('C'); // Active chest, locked
-          } else if (activeChest.status === 'unlockable' || unlockCheck.isUnlockable) {
-            setScreenState('D'); // Chest unlockable
-          } else if (activeChest.status === 'completed') {
-            setScreenState('B'); // Chest completed, can start new one
+          if (unreadChits.length === 0) {
+            // All chits read, mark as completed
+            await updateChestStatus(activeChest.id, 'completed');
+            setScreenState('B');
           } else {
-            setScreenState('B'); // Fallback
+            // Still has unread chits
+            setScreenState('D');
           }
         } else {
-          // No active chest
-          setScreenState('B');
+          setScreenState('B'); // Fallback
         }
       } else {
-        // Not paired
-        setScreenState('A');
+        // No active chest
+        setScreenState('B');
       }
-
-    } catch (err) {
-      console.error('Error loading home data:', err);
-      setError('Failed to load data. Please try again.');
-      setScreenState('error');
-    } finally {
-      setLoading(false);
+    } else {
+      // Not paired
+      setScreenState('A');
     }
-  };
+
+  } catch (err) {
+    console.error('Error loading home data:', err);
+    setError('Failed to load data. Please try again.');
+    setScreenState('error');
+  } finally {
+    setLoading(false);
+  }
+};
 
   const handleStartNewChest = async () => {
     if (!profile?.pairedUserId || !settings) return;
@@ -767,13 +803,20 @@ const Home = () => {
 
       // Create new chest with dev mode duration
       const durationInMinutes = isDev ? 1 : (settings.chestDuration * 1440);
-      await createChest(user.uid, profile.pairedUserId, durationInMinutes);
+      console.log('Creating chest with duration:', durationInMinutes, 'minutes');
       
+      const newChest = await createChest(user.uid, profile.pairedUserId, durationInMinutes);
+      console.log('Chest created:', newChest);
+      
+      // Reload data to update UI
       await loadHomeData();
+      
+      // Show success message
+      setError(''); // Clear any previous errors
 
     } catch (err) {
       console.error('Error starting new chest:', err);
-      setError(err.message);
+      setError(err.message || 'Failed to start new chest');
     } finally {
       setIsCreatingChest(false);
     }
@@ -807,6 +850,8 @@ const Home = () => {
     setShowTutorial(false);
     localStorage.setItem('hasSeenTutorial', 'true');
   };
+
+
 
   const getTimeUntilUnlock = () => {
     if (!chestData?.unlockDate) return '';
@@ -842,10 +887,22 @@ const Home = () => {
       <div className="home-container">
         <Header title="The Chest" />
         <div className="home-error">
-          <div className="error-message">{error}</div>
-          <button className="retry-button" onClick={loadHomeData}>
-            Retry
-          </button>
+          <div className="error-message">
+            {error}
+            {error.includes('Cannot start new chest') && (
+              <div className="error-hint">
+                You may need to complete or wait for the current chest to unlock.
+              </div>
+            )}
+          </div>
+          <div className="error-actions">
+            <button className="retry-button" onClick={loadHomeData}>
+              Refresh
+            </button>
+            <button className="secondary-button" onClick={() => setError('')}>
+              Dismiss
+            </button>
+          </div>
         </div>
       </div>
     );
@@ -970,7 +1027,7 @@ const Home = () => {
                     onClick={handleStartNewChest}
                     disabled={isCreatingChest}
                   >
-                    <span className="button-icon">✨</span>
+                    <span className="button-icon"></span>
                     {isCreatingChest ? 'Creating Time Capsule...' : 'Start New Chest'}
                   </button>
                 </div>

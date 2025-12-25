@@ -32,6 +32,21 @@ const ReadChest = () => {
   const contentRef = useRef(null);
   const messageRef = useRef(null);
   
+    // Mark chit as read
+  const markCurrentChitAsRead = useCallback(async () => {
+    if (chits.length === 0 || currentIndex >= chits.length) return;
+    
+    const currentChit = chits[currentIndex];
+    if (readChits.has(currentChit.id)) return;
+    
+    try {
+      await markChitAsRead(chestId, currentChit.id, user.uid);
+      setReadChits(prev => new Set([...prev, currentChit.id]));
+    } catch (err) {
+      console.error('Error marking chit as read:', err);
+    }
+  }, [chestId, chits, currentIndex, readChits, user.uid]);
+  
   // Load chest and chits
   useEffect(() => {
     const initialize = async () => {
@@ -71,13 +86,17 @@ const ReadChest = () => {
         const partner = await getPartnerInfo(partnerId);
         setPartnerInfo(partner);
         
-        // Load chits from partner
-        const partnerChits = await getChitsForChest(chestIdFromState, user.uid);
-        if (partnerChits.length === 0) {
-          throw new Error('No chits found in this chest');
-        }
+        // Load chits from partner - FIX: Get partner's chits, not user's chits
+        const partnerChits = await getChitsForChest(chestIdFromState, partnerId);
         
-        setChits(partnerChits);
+        // FIX: Handle empty chests - DON'T navigate automatically
+        if (partnerChits.length === 0) {
+          // Just set empty chits array and continue
+          setChits([]);
+          // We'll let the user see the empty state and complete reading normally
+        } else {
+          setChits(partnerChits);
+        }
         
         // Mark chest as opened if it's still unlockable
         if (chest.status === 'unlockable') {
@@ -93,7 +112,7 @@ const ReadChest = () => {
     };
 
     initialize();
-  }, [user, profile, location]);
+  }, [user, profile, location, navigate]); // Add navigate to dependencies
 
   // Handle scroll to reveal calming message
   useEffect(() => {
@@ -114,33 +133,28 @@ const ReadChest = () => {
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [currentIndex]);
+  }, [currentIndex, markCurrentChitAsRead]);
 
   // Update progress
   useEffect(() => {
     if (chits.length > 0) {
       const progressValue = Math.round(((currentIndex + 1) / chits.length) * 100);
       setProgress(progressValue);
+    } else {
+      setProgress(0);
     }
   }, [currentIndex, chits.length]);
 
-  // Mark chit as read
-  const markCurrentChitAsRead = useCallback(async () => {
-    if (chits.length === 0 || currentIndex >= chits.length) return;
-    
-    const currentChit = chits[currentIndex];
-    if (readChits.has(currentChit.id)) return;
-    
-    try {
-      await markChitAsRead(chestId, currentChit.id, user.uid);
-      setReadChits(prev => new Set([...prev, currentChit.id]));
-    } catch (err) {
-      console.error('Error marking chit as read:', err);
-    }
-  }, [chestId, chits, currentIndex, readChits, user.uid]);
+
 
   // Handle next chit
   const handleNextChit = () => {
+    if (chits.length === 0) {
+      // Empty chest - directly show completion
+      handleCompleteReading();
+      return;
+    }
+    
     if (currentIndex < chits.length - 1) {
       setCurrentIndex(prev => prev + 1);
       setShowCalmingMessage(false);
@@ -170,7 +184,15 @@ const ReadChest = () => {
   };
 
   // Handle completion acknowledgment
-  const handleCompletionAcknowledge = () => {
+  const handleCompletionAcknowledge = async () => {
+    try {
+      // Mark chest as completed before navigating
+      if (chestId) {
+        await updateChestStatus(chestId, 'completed');
+      }
+    } catch (err) {
+      console.error('Error marking chest as completed:', err);
+    }
     navigate('/home');
   };
 
@@ -225,16 +247,100 @@ const ReadChest = () => {
       <div className="readchest-container">
         <Header title="Reading Chest" showBack={true} backPath="/home" />
         <div className="readchest-error">
-          <div className="error-message">{error}</div>
-          <button className="action-button" onClick={() => navigate('/home')}>
-            Back to Home
-          </button>
+          <div className="error-message">
+            {error.includes('No chits') || error.includes('empty') || error.includes('Chest was empty') ? (
+              <>
+                <div className="empty-chest-icon">📭</div>
+                <h3>Empty Chest</h3>
+                <p>No chits were added to this chest by your partner.</p>
+                <button 
+                  className="action-button"
+                  onClick={async () => {
+                    // Mark chest as completed and navigate home
+                    try {
+                      if (chestId) {
+                        await updateChestStatus(chestId, 'completed');
+                      }
+                    } catch (err) {
+                      console.error('Error marking chest as completed:', err);
+                    }
+                    navigate('/home');
+                  }}
+                >
+                  Return to Home
+                </button>
+              </>
+            ) : (
+              <>
+                <div className="error-message-text">{error}</div>
+                <button className="action-button" onClick={() => navigate('/home')}>
+                  Back to Home
+                </button>
+              </>
+            )}
+          </div>
         </div>
       </div>
     );
   }
 
   if (showCompletion) {
+    // Handle empty chest completion
+    if (chits.length === 0) {
+      return (
+        <div className="readchest-container">
+          <Header title="Reading Complete" showBack={false} />
+          
+          <div className="completion-screen">
+            <div className="completion-icon">📭</div>
+            <h2 className="completion-title">Empty Chest</h2>
+            <div className="completion-message">
+              No chits were added to this chest by your partner.
+            </div>
+            
+            <div className="reading-stats">
+              <div className="stat-item">
+                <span className="stat-label">Chits read:</span>
+                <span className="stat-value">0</span>
+              </div>
+              <div className="stat-item">
+                <span className="stat-label">From:</span>
+                <span className="stat-value">{partnerInfo?.username || 'Partner'}</span>
+              </div>
+              <div className="stat-item">
+                <span className="stat-label">Chest duration:</span>
+                <span className="stat-value">
+                  {chestData?.settings?.durationDays || 7} days
+                </span>
+              </div>
+            </div>
+            
+            <button
+              className="completion-button"
+              onClick={async () => {
+                // Mark chest as completed before returning home
+                try {
+                  if (chestId) {
+                    await updateChestStatus(chestId, 'completed');
+                  }
+                } catch (err) {
+                  console.error('Error marking chest as completed:', err);
+                }
+                navigate('/home');
+              }}
+            >
+              Return to Home
+            </button>
+            
+            <div className="completion-note">
+              <p>You can start a new chest to continue sharing.</p>
+            </div>
+          </div>
+        </div>
+      );
+    }
+    
+    // Handle normal (non-empty) chest completion
     const completionMessage = getCompletionMessage();
     
     return (
@@ -297,7 +403,7 @@ const ReadChest = () => {
             ></div>
           </div>
           <div className="progress-text">
-            {currentIndex + 1} of {chits.length} chits
+            {chits.length === 0 ? 'Empty Chest' : `${currentIndex + 1} of ${chits.length} chits`}
           </div>
         </div>
 
@@ -321,59 +427,76 @@ const ReadChest = () => {
             ref={contentRef}
             className="chit-content-section"
           >
-            <div className="chit-header">
-              <div className="chit-emotion">
-                <span className="emotion-icon">
-                  {getEmotionIcon(currentChit.emotion)}
-                </span>
-                <span className="emotion-label">
-                  {getEmotionDisplayName(currentChit.emotion)}
-                </span>
+            {chits.length === 0 ? (
+              <div className="empty-chest-content">
+                <div className="empty-chest-icon-large">📭</div>
+                <h3 className="empty-chest-title">This Chest is Empty</h3>
+                <p className="empty-chest-message">
+                  Your partner did not add any chits to this chest during the lock period.
+                </p>
+                <p className="empty-chest-hint">
+                  You can still complete the reading to mark this chest as finished.
+                </p>
               </div>
-              <div className="chit-number">
-                Chit {currentIndex + 1}
-              </div>
-            </div>
-            
-            <div className="chit-content">
-              {currentChit.content}
-            </div>
-            
-            <div className="chit-meta">
-              <span className="chit-date">
-                Written {formatDate(currentChit.createdAt)}
-              </span>
-              {currentChit.isRead && (
-                <span className="read-indicator">
-                  ✓ Read
-                </span>
-              )}
-            </div>
+            ) : (
+              <>
+                <div className="chit-header">
+                  <div className="chit-emotion">
+                    <span className="emotion-icon">
+                      {getEmotionIcon(currentChit.emotion)}
+                    </span>
+                    <span className="emotion-label">
+                      {getEmotionDisplayName(currentChit.emotion)}
+                    </span>
+                  </div>
+                  <div className="chit-number">
+                    Chit {currentIndex + 1}
+                  </div>
+                </div>
+                
+                <div className="chit-content">
+                  {currentChit.content}
+                </div>
+                
+                <div className="chit-meta">
+                  <span className="chit-date">
+                    Written {formatDate(currentChit.createdAt)}
+                  </span>
+                  {currentChit.isRead && (
+                    <span className="read-indicator">
+                      ✓ Read
+                    </span>
+                  )}
+                </div>
+              </>
+            )}
           </div>
 
           {/* Lower Section: Calming Message (Hidden until scroll) */}
-          <div 
-            ref={messageRef}
-            className={`calming-message-section ${showCalmingMessage ? 'visible' : ''}`}
-          >
-            <div className="section-divider"></div>
-            
-            <div className="calming-message-header">
-              <div className="message-icon">🧘</div>
-              <h3>Reading Guidance</h3>
+          {chits.length > 0 && (
+            <div 
+              ref={messageRef}
+              className={`calming-message-section ${showCalmingMessage ? 'visible' : ''}`}
+            >
+              <div className="section-divider"></div>
+              
+              <div className="calming-message-header">
+                <div className="message-icon">🧘</div>
+                <h3>Reading Guidance</h3>
+              </div>
+              
+              <div className="calming-message-content">
+                <p>{calmingMessage}</p>
+              </div>
+              
+              <div className="message-instruction">
+                <p>Scroll down to reveal this message. Take your time.</p>
+              </div>
             </div>
-            
-            <div className="calming-message-content">
-              <p>{calmingMessage}</p>
-            </div>
-            
-            <div className="message-instruction">
-              <p>Scroll down to reveal this message. Take your time.</p>
-            </div>
-          </div>
+          )}
 
-          {/* Scroll Prompt (only shows if message not visible) */}
-          {!showCalmingMessage && (
+          {/* Scroll Prompt (only shows if message not visible and chits exist) */}
+          {!showCalmingMessage && chits.length > 0 && (
             <div className="scroll-prompt">
               <div className="prompt-icon">👇</div>
               <p>Scroll down for calming guidance</p>
@@ -393,7 +516,11 @@ const ReadChest = () => {
           
           <div className="nav-status">
             <span className="status-text">
-              {currentIndex === chits.length - 1 ? 'Last chit' : `${currentIndex + 1} of ${chits.length}`}
+              {chits.length === 0 
+                ? 'Empty Chest' 
+                : currentIndex === chits.length - 1 
+                  ? 'Last chit' 
+                  : `${currentIndex + 1} of ${chits.length}`}
             </span>
           </div>
           
@@ -401,21 +528,40 @@ const ReadChest = () => {
             className="nav-button next-button"
             onClick={handleNextChit}
           >
-            {currentIndex === chits.length - 1 ? 'Finish Reading' : 'Next →'}
+            {chits.length === 0 
+              ? 'Finish Reading' 
+              : currentIndex === chits.length - 1 
+                ? 'Finish Reading' 
+                : 'Next →'}
           </button>
         </div>
 
         {/* Reading Instructions */}
-        <div className="reading-instructions">
-          <h4>Reading Guidelines</h4>
-          <ul>
-            <li>Read each chit fully before scrolling</li>
-            <li>Scroll down for calming guidance specific to each emotion</li>
-            <li>Take a breath between chits</li>
-            <li>No need to respond immediately</li>
-            <li>Chits must be read in order</li>
-          </ul>
-        </div>
+        {chits.length > 0 && (
+          <div className="reading-instructions">
+            <h4>Reading Guidelines</h4>
+            <ul>
+              <li>Read each chit fully before scrolling</li>
+              <li>Scroll down for calming guidance specific to each emotion</li>
+              <li>Take a breath between chits</li>
+              <li>No need to respond immediately</li>
+              <li>Chits must be read in order</li>
+            </ul>
+          </div>
+        )}
+
+        {/* Empty Chest Instructions */}
+        {chits.length === 0 && (
+          <div className="empty-chest-instructions">
+            <h4>Empty Chest Information</h4>
+            <ul>
+              <li>Your partner did not add any chits during the lock period</li>
+              <li>You can click "Finish Reading" to complete this chest</li>
+              <li>This will allow you to start a new chest with your partner</li>
+              <li>Consider discussing communication preferences with your partner</li>
+            </ul>
+          </div>
+        )}
       </main>
     </div>
   );
