@@ -12,6 +12,8 @@ const Header = ({
   logoUrl = '/path/to/your/logo.png' // Replace with your actual logo path
 }) => {
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const navigate = useNavigate();
+  
 
   const handleLogout = async () => {
     setIsLoggingOut(true);
@@ -30,6 +32,8 @@ const Header = ({
   const handleBack = () => {
     console.log('Navigate to:', backPath);
   };
+
+  
 
   return (
     <header className="classic-header">

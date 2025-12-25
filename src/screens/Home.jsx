@@ -645,7 +645,7 @@ const EmotionalWeather = ({ chits }) => {
     <div className="insights-header">
       <div className="header-content">
         <h5 className="insights-title">
-          <span className="title-icon">🔍</span>
+          <span className="title-icon"></span>
           Emotional Insights
         </h5>
         <span className="insights-count">{insights.length} pattern{insights.length !== 1 ? 's' : ''} detected</span>
@@ -1498,46 +1498,63 @@ const loadHomeData = async () => {
             </div>
           </div>
             {screenState !== 'A' && (
-              <div className="stats-bar">
-                <div className="stat-item">
-                  <div className="stat-icon">💌</div>
-                  <div className="stat-content">
-                    <div className="stat-number">
-                      {chitsHistory.reduce((sum, chest) => sum + chest.chits.length, 0)}
-                    </div>
-                    <div className="stat-label">Total Chits</div>
-                  </div>
+            <div className="stats-bar">
+              <div className="stat-item">
+                <div className="stat-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M20 4H4C2.9 4 2.01 4.9 2.01 6L2 18C2 19.1 2.9 20 4 20H20C21.1 20 22 19.1 22 18V6C22 4.9 21.1 4 20 4ZM20 8L12 13L4 8V6L12 11L20 6V8Z" fill="currentColor"/>
+                  </svg>
                 </div>
-                
-                <div className="stat-item">
-                  <div className="stat-icon">📦</div>
-                  <div className="stat-content">
-                    <div className="stat-number">{chestHistory.length}</div>
-                    <div className="stat-label">Time Capsules</div>
+                <div className="stat-content">
+                  <div className="stat-number">
+                    {chitsHistory.reduce((sum, chest) => sum + chest.chits.length, 0)}
                   </div>
-                </div>
-                
-                <div className="stat-item">
-                  <div className="stat-icon">⏳</div>
-                  <div className="stat-content">
-                    <div className="stat-number">
-                      {chestData ? getTimeUntilUnlock() : '--'}
-                    </div>
-                    <div className="stat-label">Until Unlock</div>
-                  </div>
-                </div>
-                
-                <div className="stat-item">
-                  <div className="stat-icon">❤️</div>
-                  <div className="stat-content">
-                    <div className="stat-number">
-                      {Math.round(connectionStrength * 20)}%
-                    </div>
-                    <div className="stat-label">Connection</div>
-                  </div>
+                  <div className="stat-label">Total Chits</div>
                 </div>
               </div>
-            )}
+              
+              <div className="stat-item">
+                <div className="stat-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M19.5 3.5L18 2L16.5 3.5L15 2L13.5 3.5L12 2L10.5 3.5L9 2L7.5 3.5L6 2L4.5 3.5L3 2V22L4.5 20.5L6 22L7.5 20.5L9 22L10.5 20.5L12 22L13.5 20.5L15 22L16.5 20.5L18 22L19.5 20.5L21 22V2L19.5 3.5ZM19 19.09H5V4.91H19V19.09Z" fill="currentColor"/>
+                    <path d="M6 15H18V17H6V15ZM6 11H18V13H6V11ZM6 7H18V9H6V7Z" fill="currentColor"/>
+                  </svg>
+                </div>
+                <div className="stat-content">
+                  <div className="stat-number">{chestHistory.length}</div>
+                  <div className="stat-label">Time Capsules</div>
+                </div>
+              </div>
+              
+              <div className="stat-item">
+                <div className="stat-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M6 2V8H6.01L6 8.01L10 12L6 16L6.01 16.01H6V22H18V16.01H17.99L18 16L14 12L18 8.01L17.99 8H18V2H6ZM16 16.5V20H8V16.5L12 12.5L16 16.5ZM12 11.5L8 7.5V4H16V7.5L12 11.5Z" fill="currentColor"/>
+                  </svg>
+                </div>
+                <div className="stat-content">
+                  <div className="stat-number">
+                    {chestData ? getTimeUntilUnlock() : '--'}
+                  </div>
+                  <div className="stat-label">Until Unlock</div>
+                </div>
+              </div>
+              
+              <div className="stat-item">
+                <div className="stat-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 21.35L10.55 20.03C5.4 15.36 2 12.28 2 8.5C2 5.42 4.42 3 7.5 3C9.24 3 10.91 3.81 12 5.09C13.09 3.81 14.76 3 16.5 3C19.58 3 22 5.42 22 8.5C22 12.28 18.6 15.36 13.45 20.04L12 21.35Z" fill="currentColor"/>
+                  </svg>
+                </div>
+                <div className="stat-content">
+                  <div className="stat-number">
+                    {Math.round(connectionStrength * 20)}%
+                  </div>
+                  <div className="stat-label">Connection</div>
+                </div>
+              </div>
+            </div>
+          )}
           </div>
           
         </div>

@@ -173,18 +173,24 @@
 .connection-line {
   position: absolute;
   top: 50%;
-  left: 10%;
-  right: 10%;
+  left: 18%;                /* tighten so line starts near left avatar */
+  right: 18%;               /* and ends near right avatar */
   height: 2px;
-  background: var(--border-color);
+  background: rgba(255, 255, 255, 0.18);  /* subtle light line */
   transform: translateY(-50%);
+  z-index: 0;               /* behind avatars and name pills */
 }
+
+
 
 .connection-energy {
   height: 100%;
   background: var(--tan);
   transition: width 1s ease, opacity 1s ease;
+  min-width: 8px;          /* always at least a small visible segment */
 }
+
+
 
 .connection-nodes {
   position: absolute;
@@ -202,6 +208,25 @@
   flex-direction: column;
   align-items: center;
   gap: 8px;
+  position: relative;
+}
+
+.node-label {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  max-width: 140px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: var(--white);
+  font-size: 0.8rem;
+  font-weight: 500;
+  backdrop-filter: blur(6px);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .node-avatar {
@@ -219,17 +244,26 @@
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
 }
 
+.connection-node.you .node-label {
+  right: 150%;                 /* pill to the left of Y */
+  text-align: right;
+}
+
+.connection-node.partner .node-label {
+  left: 150%;                  /* pill to the right of T */
+  text-align: left;
+}
 .connection-node.partner .node-avatar {
   background: var(--tan);
   color: var(--navy);
 }
 
-.node-label {
+/* .node-label {
   color: var(--text-primary);
   font-weight: 500;
   font-size: 0.85rem;
   letter-spacing: 0.3px;
-}
+} */
 
 /* Dashboard Grid */
 .home-content {
@@ -1115,15 +1149,18 @@
   font-size: 1.8rem;
   width: 48px;
   height: 48px;
-  background: var(--cream);
-  color: var(--navy);
-  border-radius: 8px;
+  background: var(--navy);
+  color: var(--white);
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid var(--border-color);
+  border: none;
 }
 
+.stat-icon svg {
+  fill: var(--white);
+}
 .stat-content {
   flex: 1;
 }

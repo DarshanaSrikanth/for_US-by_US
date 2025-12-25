@@ -78,25 +78,34 @@
 .onboarding-card {
   width: 100%;
   max-width: 440px;
+
+  /* Very transparent, subtle tint */
   background: linear-gradient(
     135deg,
-    rgba(247, 239, 225, 0.98),
-    rgba(226, 207, 178, 0.97)
+    rgba(255, 255, 255, 0.10),
+    rgba(255, 255, 255, 0.03)
   );
+
   border-radius: 24px;
   padding: 30px 30px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow:
+    0 24px 60px rgba(5, 15, 36, 0.55),
+    0 0 0 1px rgba(255, 255, 255, 0.15);
+
+  /* Remove blur so video is clear, not frosted */
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+
   text-align: center;
-  border: 1px solid rgba(255, 255, 255, 0.9);
-  box-shadow: 0 24px 60px rgba(5, 15, 36, 0.5),
-    0 0 0 1px rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(20px) saturate(120%);
-  -webkit-backdrop-filter: blur(20px) saturate(120%);
   position: relative;
   overflow: hidden;
   color: var(--text-main);
   animation: card-enter 0.8s cubic-bezier(0.19, 1, 0.22, 1) forwards;
   margin-left: 800px;
 }
+
+
 
 /* Subtle sheen effect on card */
 .onboarding-card::before {
