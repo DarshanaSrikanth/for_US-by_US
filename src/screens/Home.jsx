@@ -325,89 +325,213 @@ const EmotionalWeather = ({ chits }) => {
   };
 
   // 10. Generate Health Insights from Analysis
+  // 10. Generate Health Insights from Analysis
   const generateHealthInsights = (analysis) => {
     const insights = [];
     
-    if (analysis.healthScore >= 80) {
+    // Health Score Insights - More nuanced tiers
+    if (analysis.healthScore >= 85) {
+      insights.push({
+        type: 'excellent',
+        message: 'Your emotional landscape shows remarkable resilience and balance—a testament to your self-awareness journey.',
+        icon: '🌄',
+        subtext: 'This consistency suggests well-developed emotional regulation strategies.'
+      });
+    } else if (analysis.healthScore >= 70) {
       insights.push({
         type: 'positive',
-        message: 'Strong emotional well-being maintained',
-        icon: '🌟'
+        message: 'Your emotional foundation is solid, with healthy patterns supporting your well-being.',
+        icon: '🛡️',
+        subtext: 'Continue nurturing these positive emotional habits.'
       });
-    } else if (analysis.healthScore <= 40) {
+    } else if (analysis.healthScore <= 35) {
       insights.push({
         type: 'concern',
-        message: 'Emotional health needs attention',
-        icon: '💭'
+        message: 'Your emotional terrain shows signs of weathering—this may be a signal to explore additional support systems.',
+        icon: '🕯️',
+        subtext: 'Consider this a gentle nudge toward self-compassion and external resources.'
+      });
+    } else if (analysis.healthScore <= 50) {
+      insights.push({
+        type: 'attention',
+        message: 'Some emotional patterns suggest room for gentle realignment.',
+        icon: '🧭',
+        subtext: 'Small, consistent adjustments can create meaningful shifts over time.'
       });
     }
     
-    if (analysis.emotionalStability >= 80) {
+    // Emotional Stability Insights - With poetic descriptors
+    if (analysis.emotionalStability >= 85) {
       insights.push({
         type: 'positive',
-        message: 'High emotional consistency',
-        icon: '⚖️'
+        message: 'Your emotional climate shows remarkable consistency—like a steady mountain in changing seasons.',
+        icon: '🏔️',
+        subtext: 'This emotional equilibrium is a powerful foundation for decision-making.'
       });
-    } else if (analysis.emotionalStability <= 40) {
+    } else if (analysis.emotionalStability >= 70) {
+      insights.push({
+        type: 'positive',
+        message: 'Your emotional currents flow with reasonable predictability.',
+        icon: '🌅',
+        subtext: 'This stability supports meaningful connections with others.'
+      });
+    } else if (analysis.emotionalStability <= 35) {
       insights.push({
         type: 'concern',
-        message: 'Frequent emotional fluctuations detected',
-        icon: '🌊'
+        message: 'Your emotional weather changes frequently—like sudden summer storms.',
+        icon: '⚡',
+        subtext: 'Tracking these patterns is the first step toward understanding their rhythm.'
+      });
+    } else if (analysis.emotionalStability <= 50) {
+      insights.push({
+        type: 'attention',
+        message: 'Your emotional tides have noticeable variations.',
+        icon: '🌊',
+        subtext: 'This awareness itself is a tool for navigation.'
       });
     }
     
-    if (analysis.positivityRatio >= 70) {
+    // Positivity Ratio Insights - More descriptive ranges
+    if (analysis.positivityRatio >= 75) {
       insights.push({
         type: 'positive',
-        message: 'Predominantly positive outlook',
-        icon: '🌈'
+        message: 'Your perspective leans toward the light—finding brightness even in challenging moments.',
+        icon: '🌻',
+        subtext: 'This optimistic lens can be contagious in the best way.'
       });
-    } else if (analysis.positivityRatio <= 30) {
+    } else if (analysis.positivityRatio >= 60) {
+      insights.push({
+        type: 'balanced',
+        message: 'You maintain a realistic yet hopeful outlook.',
+        icon: '⚖️',
+        subtext: 'This balanced approach honors both challenges and opportunities.'
+      });
+    } else if (analysis.positivityRatio <= 25) {
       insights.push({
         type: 'concern',
-        message: 'Higher focus on challenging emotions',
-        icon: '⛈️'
+        message: 'Heavier emotions have been frequent visitors lately.',
+        icon: '☁️',
+        subtext: 'Remember: clouds don\'t erase the sun, they just temporarily obscure it.'
+      });
+    } else if (analysis.positivityRatio <= 40) {
+      insights.push({
+        type: 'attention',
+        message: 'Your focus tends toward life\'s complexities and challenges.',
+        icon: '🔍',
+        subtext: 'Consider what small sparks of joy you might invite into your awareness.'
       });
     }
     
+    // Recent Emotional Shift - More evocative descriptions
     if (analysis.recentEmotionalShift === 'positive') {
       insights.push({
-        type: 'trend',
-        message: 'Recent improvement in emotional state',
-        icon: '📈'
+        type: 'momentum',
+        message: 'A fresh breeze is moving through your emotional landscape.',
+        icon: '🍃',
+        subtext: 'Notice what changes or practices might be contributing to this uplift.'
       });
     } else if (analysis.recentEmotionalShift === 'negative') {
       insights.push({
-        type: 'trend',
-        message: 'Recent emotional decline detected',
-        icon: '📉'
+        type: 'awareness',
+        message: 'Your emotional weather has cooled recently.',
+        icon: '🍂',
+        subtext: 'Seasonal shifts are natural; this awareness alone is protective.'
       });
     }
     
-    if (analysis.emotionalDiversity >= 70) {
+    // Emotional Diversity - More poetic interpretations
+    if (analysis.emotionalDiversity >= 75) {
       insights.push({
-        type: 'neutral',
-        message: 'Diverse emotional expression',
-        icon: '🎨'
+        type: 'rich',
+        message: 'Your emotional palette is beautifully varied—a full spectrum of human experience.',
+        icon: '🎨',
+        subtext: 'This emotional range suggests openness to life\'s complexity.'
+      });
+    } else if (analysis.emotionalDiversity >= 60) {
+      insights.push({
+        type: 'balanced',
+        message: 'You experience a healthy range of emotional colors.',
+        icon: '🌈',
+        subtext: 'This diversity helps you respond flexibly to different situations.'
       });
     } else if (analysis.emotionalDiversity <= 30) {
       insights.push({
-        type: 'neutral',
-        message: 'Focused emotional expression',
-        icon: '🎯'
+        type: 'focused',
+        message: 'Your emotional experience currently flows through a narrower channel.',
+        icon: '🌊',
+        subtext: 'This focus can indicate depth, or perhaps a need to explore other emotional territories.'
+      });
+    } else if (analysis.emotionalDiversity <= 45) {
+      insights.push({
+        type: 'concentrated',
+        message: 'Your emotional expression tends toward specific tones.',
+        icon: '🎯',
+        subtext: 'Notice if this concentration serves you or limits your expressive range.'
       });
     }
     
-    // If no specific insights, provide general one
+    // Add personalized insights based on combinations
+    if (insights.filter(i => i.type === 'concern').length >= 3) {
+      insights.push({
+        type: 'compassion',
+        message: 'Your emotional landscape shows multiple signs of challenge—this is a courageous space to acknowledge.',
+        icon: '🕊️',
+        subtext: 'Consider this an invitation for extra kindness toward yourself this week.'
+      });
+    }
+    
+    if (insights.filter(i => i.type.includes('positive') || i.type === 'excellent').length >= 3) {
+      insights.push({
+        type: 'celebration',
+        message: 'Multiple indicators suggest flourishing emotional well-being.',
+        icon: '🎉',
+        subtext: 'Take a moment to acknowledge what\'s supporting this positive state.'
+      });
+    }
+    
+    // Add a summary insight for significant patterns
+    const positiveInsights = insights.filter(i => i.type === 'positive' || i.type === 'excellent').length;
+    const concernInsights = insights.filter(i => i.type === 'concern').length;
+    
+    if (positiveInsights >= 2 && concernInsights === 0) {
+      insights.push({
+        type: 'summary',
+        message: 'Overall, your emotional ecosystem shows signs of vibrant health and balance.',
+        icon: '🌳',
+        subtext: 'These patterns suggest resilience and emotional intelligence in action.'
+      });
+    } else if (concernInsights >= 2) {
+      insights.push({
+        type: 'summary',
+        message: 'Several signals suggest your emotional world could use some gentle tending.',
+        icon: '🌱',
+        subtext: 'Even awareness of these patterns is a form of care.'
+      });
+    }
+    
+    // If no specific insights, provide more thoughtful general one
     if (insights.length === 0 && analysis.totalChits > 0) {
       insights.push({
-        type: 'neutral',
-        message: 'Emotional patterns developing',
-        icon: '🌀'
+        type: 'observation',
+        message: 'Your emotional patterns are still revealing their unique contours.',
+        icon: '🌀',
+        subtext: 'Continue observing—each entry adds clarity to your emotional landscape.'
+      });
+    } else if (analysis.totalChits === 0) {
+      insights.push({
+        type: 'invitation',
+        message: 'Your emotional journal awaits its first entries.',
+        icon: '📖',
+        subtext: 'Begin whenever you feel ready—there\'s no right or wrong starting point.'
       });
     }
     
-    return insights;
+    // Limit insights to most relevant 5-6
+    const priorityOrder = ['concern', 'celebration', 'compassion', 'attention', 'summary', 'momentum', 'positive', 'excellent', 'balanced', 'rich', 'focused', 'observation', 'invitation'];
+    
+    return insights
+      .sort((a, b) => priorityOrder.indexOf(a.type) - priorityOrder.indexOf(b.type))
+      .slice(0, 6);
   };
 
   // 11. Generate Visual Representation
@@ -478,47 +602,7 @@ const EmotionalWeather = ({ chits }) => {
       </div>
       
       {/* Dominant Emotion Visualization */}
-      <div className="dominant-emotion">
-        <div 
-          className="emotion-visual"
-          style={{ 
-            background: visualization.gradient,
-            transform: `scale(${1 + visualization.intensity * 0.2})`
-          }}
-        >
-          <span className="emotion-icon">{visualization.icon}</span>
-          {analysis.dominantEmotion && (
-            <div className="confidence-badge">
-              {analysis.dominantEmotion.confidence}%
-            </div>
-          )}
-        </div>
-        
-        {analysis.dominantEmotion ? (
-          <div className="emotion-details">
-            <h4 className="emotion-name">{analysis.dominantEmotion.name}</h4>
-            <div className="emotion-stats">
-              <span className="stat-item">
-                <span className="stat-label">Strength:</span>
-                <span className="stat-value">
-                  {Math.round(analysis.dominantEmotion.strength)}
-                </span>
-              </span>
-              <span className="stat-item">
-                <span className="stat-label">Frequency:</span>
-                <span className="stat-value">
-                  {analysis.dominantEmotion.frequency}
-                </span>
-              </span>
-            </div>
-          </div>
-        ) : (
-          <div className="emotion-details">
-            <h4 className="emotion-name">No Data</h4>
-            <p className="emotion-subtitle">Awaiting emotional input</p>
-          </div>
-        )}
-      </div>
+      
       
       {/* Health Metrics Grid */}
       <div className="health-metrics">
@@ -557,18 +641,89 @@ const EmotionalWeather = ({ chits }) => {
       
       {/* Health Insights */}
       {insights.length > 0 && (
-        <div className="health-insights">
-          <h5 className="insights-title">Insights</h5>
-          <div className="insights-list">
-            {insights.map((insight, index) => (
-              <div key={index} className={`insight-item ${insight.type}`}>
-                <span className="insight-icon">{insight.icon}</span>
-                <span className="insight-text">{insight.message}</span>
+  <div className="health-insights">
+    <div className="insights-header">
+      <div className="header-content">
+        <h5 className="insights-title">
+          <span className="title-icon">🔍</span>
+          Emotional Insights
+        </h5>
+        <span className="insights-count">{insights.length} pattern{insights.length !== 1 ? 's' : ''} detected</span>
+      </div>
+      <div className="header-subtitle">
+        Patterns and observations from your emotional journey
+      </div>
+    </div>
+
+    <div className="insights-list">
+      {insights.map((insight, index) => (
+        <div 
+          key={index} 
+          className={`insight-card insight-${insight.type}`}
+          style={{ animationDelay: `${index * 100}ms` }}
+        >
+          <div className="insight-card-header">
+            <div className="insight-icon-container">
+              <span className="insight-icon">{insight.icon}</span>
+              <span className="insight-type-badge">{insight.type}</span>
+            </div>
+            <div className="insight-priority" title="Insight relevance">
+              {index < 3 ? '✦' : '○'}
+            </div>
+          </div>
+
+          <div className="insight-content">
+            <p className="insight-message">{insight.message}</p>
+            {insight.subtext && (
+              <div className="insight-subtext">
+                <span className="subtext-icon">💭</span>
+                <span className="subtext-content">{insight.subtext}</span>
               </div>
-            ))}
+            )}
+          </div>
+
+          <div className="insight-footer">
+            <div className="insight-indicator">
+              <div className={`indicator-dot indicator-${insight.type}`}></div>
+              <span className="insight-category">
+                {insight.type === 'concern' ? 'Attention Suggested' :
+                 insight.type === 'positive' ? 'Strength Noted' :
+                 insight.type === 'excellent' ? 'Celebration' :
+                 insight.type.charAt(0).toUpperCase() + insight.type.slice(1)}
+              </span>
+            </div>
+            <div className="insight-number">#{index + 1}</div>
           </div>
         </div>
-      )}
+      ))}
+    </div>
+
+    <div className="insights-footer">
+      <div className="insights-summary">
+        <div className="summary-item">
+          <span className="summary-icon">📊</span>
+          <span className="summary-text">
+            {insights.filter(i => i.type === 'concern' || i.type === 'attention').length > 0 ? 
+             `${insights.filter(i => i.type === 'concern' || i.type === 'attention').length} area${insights.filter(i => i.type === 'concern' || i.type === 'attention').length !== 1 ? 's' : ''} for gentle attention` :
+             'All patterns within healthy ranges'}
+          </span>
+        </div>
+        <div className="summary-item">
+          <span className="summary-icon">✨</span>
+          <span className="summary-text">
+            {insights.filter(i => i.type === 'positive' || i.type === 'excellent').length} strength{insights.filter(i => i.type === 'positive' || i.type === 'excellent').length !== 1 ? 's' : ''} identified
+          </span>
+        </div>
+      </div>
+      <div className="insights-note">
+        <span className="note-icon">💡</span>
+        <span className="note-text">
+          These insights are based on your recent emotional entries and patterns
+        </span>
+      </div>
+    </div>
+  </div>
+)}
       
       {/* Trend Indicator */}
       {analysis.sentimentTrend !== 'stable' && (
@@ -876,7 +1031,7 @@ const loadHomeData = async () => {
       <div className="home-container">
         <Header title="The Chest" />
         <div className="home-loading">
-          <LoadingSpinner size="large" text="Loading your journey..." />
+          <LoadingSpinner size="large" text=" Loading your journey..." />
         </div>
       </div>
     );
@@ -1027,7 +1182,6 @@ const loadHomeData = async () => {
                     onClick={handleStartNewChest}
                     disabled={isCreatingChest}
                   >
-                    <span className="button-icon"></span>
                     {isCreatingChest ? 'Creating Time Capsule...' : 'Start New Chest'}
                   </button>
                 </div>
@@ -1156,100 +1310,234 @@ const loadHomeData = async () => {
               <h3 className="card-title">Quick Actions</h3>
               <div className="action-buttons-grid">
                 <button 
-                  className="action-button-icon"
+                  className="action-button-icon tooltip-container"
                   onClick={handleGoToHistory}
+                  aria-label="View History"
                 >
-                  <span className="button-icon">📜</span>
-                  <span className="button-label">History</span>
+                  <svg className="button-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20Z" fill="currentColor"/>
+                    <path d="M12.5 7H11V13L16.2 16.2L17 14.9L12.5 12.2V7Z" fill="currentColor"/>
+                  </svg>
                 </button>
                 
                 <button 
-                  className="action-button-icon"
+                  className="action-button-icon tooltip-container"
                   onClick={handleGoToSettings}
                   disabled={screenState === 'C'}
+                  aria-label="Settings"
                 >
-                  <span className="button-icon">⚙️</span>
-                  <span className="button-label">Settings</span>
+                  <svg className="button-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M19.14 12.94C19.18 12.64 19.2 12.34 19.2 12C19.2 11.66 19.18 11.36 19.14 11.06L21.16 9.38C21.36 9.22 21.4 8.95 21.26 8.73L19.34 5.72C19.21 5.53 18.96 5.48 18.77 5.6L16.48 7C15.96 6.66 15.38 6.39 14.76 6.2L14.4 3.73C14.36 3.49 14.17 3.31 13.93 3.31H10.07C9.83 3.31 9.64 3.49 9.6 3.73L9.24 6.2C8.62 6.39 8.04 6.66 7.52 7L5.23 5.6C5.04 5.48 4.79 5.53 4.66 5.72L2.74 8.73C2.6 8.95 2.64 9.22 2.84 9.38L4.86 11.06C4.82 11.36 4.8 11.66 4.8 12C4.8 12.34 4.82 12.64 4.86 12.94L2.84 14.62C2.64 14.78 2.6 15.05 2.74 15.27L4.66 18.28C4.79 18.47 5.04 18.52 5.23 18.4L7.52 17C8.04 17.34 8.62 17.61 9.24 17.8L9.6 20.27C9.64 20.51 9.83 20.69 10.07 20.69H13.93C14.17 20.69 14.36 20.51 14.4 20.27L14.76 17.8C15.38 17.61 15.96 17.34 16.48 17L18.77 18.4C18.96 18.52 19.21 18.47 19.34 18.28L21.26 15.27C21.4 15.05 21.36 14.78 21.16 14.62L19.14 12.94ZM12 15.5C10.07 15.5 8.5 13.93 8.5 12C8.5 10.07 10.07 8.5 12 8.5C13.93 8.5 15.5 10.07 15.5 12C15.5 13.93 13.93 15.5 12 15.5Z" fill="currentColor"/>
+                  </svg>
                 </button>
                 
                 {isDev && screenState === 'C' && chestData && (
                   <button 
-                    className="action-button-icon danger"
+                    className="action-button-icon danger tooltip-container"
                     onClick={() => {
                       if (window.confirm('Delete current chest? This is for development only.')) {
                         // Add delete logic here
                       }
                     }}
+                    aria-label="Reset Data (Dev)"
                   >
-                    <span className="button-icon">🗑️</span>
-                    <span className="button-label">Reset (Dev)</span>
+                    <svg className="button-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M6 19C6 20.1 6.9 21 8 21H16C17.1 21 18 20.1 18 19V7H6V19ZM19 4H15.5L14.5 3H9.5L8.5 4H5V6H19V4Z" fill="currentColor"/>
+                    </svg>
+                    <span className="tooltip-text">Reset Data (Development)</span>
                   </button>
                 )}
               </div>
             </div>
-            
+                        
             {/* Daily Reflection */}
-            <div className="dashboard-card reflection-card">
-              <h3 className="card-title">Today's Reflection</h3>
-              <p className="reflection-text">
-                {screenState === 'C' 
-                  ? "What emotion do you want to share with your partner today?"
-                  : screenState === 'D'
-                  ? "Prepare to receive your partner's thoughts with an open heart."
-                  : "Every shared emotion is a step closer in your journey."}
-              </p>
-              <div className="reflection-prompt">
-                {screenState === 'C' && (
-                  <button 
-                    className="reflection-button"
-                    onClick={handleAddChit}
-                  >
-                    Start Reflection
-                  </button>
-                )}
+          <div className="dashboard-card reflection-card">
+            <div className="reflection-header">
+              <h3 className="card-title">
+                <span className="title-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20Z" fill="currentColor"/>
+                    <path d="M11 7H13V9H11V7ZM11 11H13V17H11V11Z" fill="currentColor"/>
+                  </svg>
+                </span>
+                Daily Reflection
+              </h3>
+              <div className="reflection-indicator">
+                <div className="pulse-dot"></div>
+                <span className="status-text">
+                  {screenState === 'C' ? 'Ready to Share' : 
+                  screenState === 'D' ? 'Awaiting Partner' : 
+                  screenState === 'B' ? 'Connection Active' : 
+                  'Welcome'}
+                </span>
               </div>
             </div>
-            {screenState !== 'A' && (
-          <div className="stats-bar">
-            <div className="stat-item">
-              <div className="stat-icon">💌</div>
-              <div className="stat-content">
-                <div className="stat-number">
-                  {chitsHistory.reduce((sum, chest) => sum + chest.chits.length, 0)}
+
+            <div className="reflection-container">
+              {/* Floating particles background */}
+              <div className="floating-particles">
+                {[...Array(15)].map((_, i) => (
+                  <div 
+                    key={i} 
+                    className="particle"
+                    style={{
+                      '--delay': `${i * 0.2}s`,
+                      '--x': `${Math.random() * 100}%`,
+                      '--y': `${Math.random() * 100}%`,
+                      '--size': `${Math.random() * 4 + 2}px`
+                    }}
+                  />
+                ))}
+              </div>
+
+              {/* Animated floating icons */}
+              <div className="floating-icons">
+                <div className="floating-icon heart" style={{ '--i': 1 }}>
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                  </svg>
                 </div>
-                <div className="stat-label">Total Chits</div>
-              </div>
-            </div>
-            
-            <div className="stat-item">
-              <div className="stat-icon">📦</div>
-              <div className="stat-content">
-                <div className="stat-number">{chestHistory.length}</div>
-                <div className="stat-label">Time Capsules</div>
-              </div>
-            </div>
-            
-            <div className="stat-item">
-              <div className="stat-icon">⏳</div>
-              <div className="stat-content">
-                <div className="stat-number">
-                  {chestData ? getTimeUntilUnlock() : '--'}
+                <div className="floating-icon message" style={{ '--i': 2 }}>
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
+                  </svg>
                 </div>
-                <div className="stat-label">Until Unlock</div>
-              </div>
-            </div>
-            
-            <div className="stat-item">
-              <div className="stat-icon">❤️</div>
-              <div className="stat-content">
-                <div className="stat-number">
-                  {Math.round(connectionStrength * 20)}%
+                <div className="floating-icon star" style={{ '--i': 3 }}>
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                  </svg>
                 </div>
-                <div className="stat-label">Connection</div>
+              </div>
+
+              {/* 3D Card with flip animation */}
+              <div className="reflection-card-3d">
+                <div className="card-face front">
+                  <div className="reflection-content">
+                    <div className="reflection-icon-wrapper">
+                      <div className="reflection-icon">
+                        {screenState === 'C' ? (
+                          <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+                            <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20Z" fill="currentColor"/>
+                            <path d="M15 11H13V9H11V11H9V13H11V15H13V13H15V11Z" fill="currentColor"/>
+                          </svg>
+                        ) : screenState === 'D' ? (
+                          <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+                            <path d="M20 4H4C2.9 4 2.01 4.9 2.01 6L2 18C2 19.1 2.9 20 4 20H20C21.1 20 22 19.1 22 18V6C22 4.9 21.1 4 20 4ZM20 18H4V8L12 13L20 8V18ZM12 11L4 6H20L12 11Z" fill="currentColor"/>
+                          </svg>
+                        ) : (
+                          <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+                            <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" fill="currentColor"/>
+                          </svg>
+                        )}
+                      </div>
+                    </div>
+                    
+                    <div className="reflection-text-wrapper">
+                      <p className="reflection-text">
+                        {screenState === 'C' 
+                          ? "What emotion is calling to be shared with your partner today? This moment is sacred space."
+                          : screenState === 'D'
+                          ? "A treasure awaits you. Prepare your heart to receive your partner's deepest feelings."
+                          : "Your emotional journey continues. Every shared feeling weaves your story tighter together."}
+                      </p>
+                      
+                      <div className="reflection-subtext">
+                        {screenState === 'C' 
+                          ? "Your vulnerability creates connection"
+                          : screenState === 'D'
+                          ? "Anticipation makes the heart grow fonder"
+                          : "Continue building your shared emotional world"}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="card-face back">
+                  <div className="reflection-prompt">
+                    {screenState === 'C' && (
+                      <>
+                        <div className="prompt-header">
+                          <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+                            <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20Z" fill="currentColor"/>
+                            <path d="M13 7H11V9H13V7ZM13 11H11V17H13V11Z" fill="currentColor"/>
+                          </svg>
+                          <span>Ready to Reflect</span>
+                        </div>
+                        <p className="prompt-text">Take a deep breath and share what's in your heart</p>
+                        <button 
+                          className="reflection-button"
+                          onClick={handleAddChit}
+                        >
+                          <span className="button-glow"></span>
+                          <span className="button-text">Begin Reflection</span>
+                          <svg className="button-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none">
+                            <path d="M12 4L10.59 5.41L16.17 11H4V13H16.17L10.59 18.59L12 20L20 12L12 4Z" fill="currentColor"/>
+                          </svg>
+                        </button>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Progress indicator */}
+              <div className="reflection-progress">
+                <div className="progress-track">
+                  <div className="progress-fill" style={{
+                    width: screenState === 'C' ? '33%' : 
+                          screenState === 'D' ? '66%' : 
+                          screenState === 'B' ? '100%' : '0%'
+                  }}></div>
+                </div>
+                <div className="progress-labels">
+                  <span className={screenState === 'C' ? 'active' : ''}>Share</span>
+                  <span className={screenState === 'D' ? 'active' : ''}>Receive</span>
+                  <span className={screenState === 'B' ? 'active' : ''}>Connect</span>
+                </div>
               </div>
             </div>
           </div>
-        )}
+            {screenState !== 'A' && (
+              <div className="stats-bar">
+                <div className="stat-item">
+                  <div className="stat-icon">💌</div>
+                  <div className="stat-content">
+                    <div className="stat-number">
+                      {chitsHistory.reduce((sum, chest) => sum + chest.chits.length, 0)}
+                    </div>
+                    <div className="stat-label">Total Chits</div>
+                  </div>
+                </div>
+                
+                <div className="stat-item">
+                  <div className="stat-icon">📦</div>
+                  <div className="stat-content">
+                    <div className="stat-number">{chestHistory.length}</div>
+                    <div className="stat-label">Time Capsules</div>
+                  </div>
+                </div>
+                
+                <div className="stat-item">
+                  <div className="stat-icon">⏳</div>
+                  <div className="stat-content">
+                    <div className="stat-number">
+                      {chestData ? getTimeUntilUnlock() : '--'}
+                    </div>
+                    <div className="stat-label">Until Unlock</div>
+                  </div>
+                </div>
+                
+                <div className="stat-item">
+                  <div className="stat-icon">❤️</div>
+                  <div className="stat-content">
+                    <div className="stat-number">
+                      {Math.round(connectionStrength * 20)}%
+                    </div>
+                    <div className="stat-label">Connection</div>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
           
         </div>
