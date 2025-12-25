@@ -590,8 +590,8 @@
 }
 
 .chest-action-button.unlock {
-  background: var(--tan);
-  color: var(--navy);
+  background: var(#50d55f);
+  color: #50d55f;
 }
 
 .chest-action-button:hover {
