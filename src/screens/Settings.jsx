@@ -27,35 +27,54 @@ const Settings = () => {
   }, [user, profile]);
 
   const loadSettings = async () => {
-    if (!user || !profile) return;
+  if (!user || !profile) return;
 
-    try {
-      setLoading(true);
+  try {
+    setLoading(true);
+    
+    // Load settings
+    const userSettings = await getUserSettings(user.uid);
+    setSettings(userSettings);
+    setFormData({
+      chestDuration: userSettings.chestDuration
+    });
+
+    // Check if settings can be edited
+    if (profile.pairedUserId) {
+      const partner = await getPartnerInfo(profile.pairedUserId);
+      setPartnerInfo(partner);
       
-      // Load settings
-      const userSettings = await getUserSettings(user.uid);
-      setSettings(userSettings);
-      setFormData({
-        chestDuration: userSettings.chestDuration
-      });
-
-      // Check if settings can be edited
-      if (profile.pairedUserId) {
-        const partner = await getPartnerInfo(profile.pairedUserId);
-        setPartnerInfo(partner);
-        
+      try {
         const canEdit = await canEditSettings(user.uid, profile.pairedUserId);
         setEditable(canEdit.canEdit);
         setEditableReason(canEdit.reason);
+      } catch (canEditError) {
+        console.warn('Could not check edit permissions:', canEditError);
+        // Default to editable on error
+        setEditable(true);
+        setEditableReason('Could not verify chest status. You may edit settings.');
       }
-
-    } catch (error) {
-      console.error('Error loading settings:', error);
-      setErrors({ general: 'Failed to load settings' });
-    } finally {
-      setLoading(false);
+    } else {
+      // Not paired, always editable
+      setEditable(true);
+      setEditableReason(null);
     }
-  };
+
+  } catch (error) {
+    console.error('Error loading settings:', error);
+    
+    // More specific error messages
+    if (error.message.includes('permission-denied')) {
+      setErrors({ general: 'Permission denied. Please check Firestore rules.' });
+    } else if (error.message.includes('collection is not defined')) {
+      setErrors({ general: 'Configuration error. Please check imports.' });
+    } else {
+      setErrors({ general: 'Failed to load settings. Please try again.' });
+    }
+  } finally {
+    setLoading(false);
+  }
+};
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;

@@ -10,7 +10,7 @@ import LoadingSpinner from '../components/shared/LoadingSpinner';
 import './Home.css';
 
 
-// const isDev = true;
+const isDev = false;
 
 // Timeline visualization component
 const TimelineVisualization = ({ chests, currentChest }) => {
@@ -925,6 +925,10 @@ const loadHomeData = async () => {
       const activeChest = await getActiveChest(user.uid, profile.pairedUserId);
       
       if (activeChest) {
+        console.log('Active chest loaded:', activeChest);
+        console.log('unlockDate:', activeChest.unlockDate);
+        console.log('unlockDate type:', typeof activeChest.unlockDate);
+        console.log('unlockDate instanceof Date:', activeChest.unlockDate instanceof Date);
         setChestData(activeChest);
         
         // Check if chest is unlockable
@@ -985,10 +989,10 @@ const loadHomeData = async () => {
       }
 
       // Create new chest with dev mode duration
-      const durationInMinutes = settings.chestDuration * 1440;
+      const durationInMinutes = isDev ? 1 : (settings.chestDuration * 1440);
       console.log('Creating chest with duration:', durationInMinutes, 'minutes');
       
-      const newChest = await createChest(user.uid, profile.pairedUserId, durationInMinutes);
+      const newChest = await createChest(user.uid, profile.pairedUserId, durationInMinutes / 1440);
       console.log('Chest created:', newChest);
       
       // Reload data to update UI
@@ -1033,26 +1037,69 @@ const loadHomeData = async () => {
     setShowTutorial(false);
     localStorage.setItem('hasSeenTutorial', 'true');
   };
+  
 
+  
+  const formatDate = (date) => {
+  if (!date) return 'N/A';
+  
+  // Check if it's a valid date
+  const dateObj = date instanceof Date ? date : new Date(date);
+  if (isNaN(dateObj.getTime())) {
+    console.error('Invalid date:', date);
+    return 'Invalid date';
+  }
+  
+  return dateObj.toLocaleDateString('en-US', {
+    weekday: 'short',
+    month: 'short',
+    day: 'numeric'
+  });
+};
 
+const formatDateTime = (date) => {
+  if (!date) return 'N/A';
+  
+  const dateObj = date instanceof Date ? date : new Date(date);
+  if (isNaN(dateObj.getTime())) {
+    return 'Invalid date';
+  }
+  
+  return dateObj.toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric'
+  }) + ' at ' + dateObj.toLocaleTimeString('en-US', {
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+};
 
-  const getTimeUntilUnlock = () => {
-    if (!chestData?.unlockDate) return '';
-    
-    const now = new Date();
-    const unlock = new Date(chestData.unlockDate);
-    const diff = unlock - now;
-    
-    
-    
-    const hours = Math.floor(diff / (1000 * 60 * 60));
-    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-    
-    if (hours > 0) {
-      return `${hours}h ${minutes}m remaining`;
-    }
-    return `${minutes}m remaining`;
-  };
+const getTimeUntilUnlock = (unlockDate) => {
+  if (!unlockDate) return '';
+  
+  const now = new Date();
+  const unlock = unlockDate instanceof Date ? unlockDate : new Date(unlockDate);
+  
+  if (isNaN(unlock.getTime())) {
+    return 'Date error';
+  }
+  
+  const diff = unlock - now;
+  
+  if (diff <= 0) return 'Ready to open!';
+  
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+  
+  if (days > 0) {
+    return `${days}d ${hours}h remaining`;
+  } else if (hours > 0) {
+    return `${hours}h ${minutes}m remaining`;
+  }
+  return `${minutes}m remaining`;
+};
 
   if (loading) {
     return (
@@ -1238,22 +1285,22 @@ const loadHomeData = async () => {
                       <div className="time-detail">
                         <span className="detail-label">Started</span>
                         <span className="detail-value">
-                          {chestData.startDate?.toLocaleDateString([], { 
-                            weekday: 'short',
-                            month: 'short',
-                            day: 'numeric'
-                          })}
+                          {formatDate(chestData.startDate)}
                         </span>
                       </div>
                       
                       <div className="time-detail">
                         <span className="detail-label">Unlocks</span>
                         <span className="detail-value highlight">
-                          {chestData.unlockDate?.toLocaleDateString([], { 
-                            weekday: 'short',
-                            month: 'short',
-                            day: 'numeric'
-                          })}
+                          {formatDateTime(chestData.unlockDate)}
+                        </span>
+                      </div>
+                      
+                      {/* Add this for debugging */}
+                      <div className="time-detail debug" style={{ display: 'none' }}>
+                        <span className="detail-label">Debug</span>
+                        <span className="detail-value">
+                          Raw: {chestData.unlockDate?.toString()}
                         </span>
                       </div>
                     </div>

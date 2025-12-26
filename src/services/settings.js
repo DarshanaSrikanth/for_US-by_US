@@ -1,4 +1,13 @@
-import { doc, setDoc, getDoc, updateDoc } from "firebase/firestore";
+import { 
+  doc, 
+  setDoc, 
+  getDoc, 
+  updateDoc,
+  collection,
+  query,
+  where,
+  getDocs 
+} from "firebase/firestore";
 import { db } from "../firebase/config";
 
 // Default settings
@@ -60,6 +69,14 @@ export const updateUserSettings = async (userId, newSettings) => {
 // Check if settings can be edited (no active chest)
 export const canEditSettings = async (userId, partnerUserId) => {
   try {
+    // If no partner, settings are always editable
+    if (!partnerUserId) {
+      return {
+        canEdit: true,
+        reason: null
+      };
+    }
+
     const chestsRef = collection(db, "chests");
     
     // Query for active or unlockable chests
@@ -79,6 +96,10 @@ export const canEditSettings = async (userId, partnerUserId) => {
 
   } catch (error) {
     console.error("Error checking if settings can be edited:", error);
-    throw error;
+    // Return true on error to not block user from accessing settings
+    return {
+      canEdit: true,
+      reason: "Error checking chest status. Proceed with caution."
+    };
   }
 };

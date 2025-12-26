@@ -29,11 +29,21 @@ export const createChest = async (userId1, userId2, durationDays = 7) => {
     }
 
     const timestamp = serverTimestamp();
-    const unlockDate = new Date();
-    // unlockDate.setMinutes(unlockDate.getMinutes() + (durationDays));
-    unlockDate.setDate(unlockDate.getDate() + durationDays);
+    const now = new Date();
+    const unlockDate = new Date(now);
+    
+    // Add duration in MINUTES (for dev mode) or DAYS
+    if (durationDays < 1) {
+      // If duration is less than 1, treat as minutes (dev mode)
+      unlockDate.setMinutes(now.getMinutes() + Math.round(durationDays * 1440));
+    } else {
+      // Normal mode: add days
+      unlockDate.setDate(now.getDate() + durationDays);
+    }
+    
+    console.log("Current time:", now);
     console.log("Unlock date set to:", unlockDate);
-
+    console.log("Duration days param:", durationDays);
     
     const chestId = `${userId1}_${userId2}_${Date.now()}`;
     
@@ -41,9 +51,9 @@ export const createChest = async (userId1, userId2, durationDays = 7) => {
     await setDoc(doc(db, "chests", chestId), {
       userId1,
       userId2,
-      startDate: timestamp,
+      startDate: Timestamp.fromDate(now), // Use client timestamp for start
       unlockDate: Timestamp.fromDate(unlockDate),
-      status: 'active', // 'active' | 'unlockable' | 'completed' | 'opened'
+      status: 'active',
       settings: {
         durationDays: durationDays
       },
@@ -61,7 +71,7 @@ export const createChest = async (userId1, userId2, durationDays = 7) => {
     return {
       success: true,
       chestId,
-      startDate: new Date().toISOString(),
+      startDate: now.toISOString(),
       unlockDate: unlockDate.toISOString()
     };
 
@@ -71,7 +81,6 @@ export const createChest = async (userId1, userId2, durationDays = 7) => {
   }
 };
 
-// Get active chest for a user pair
 export const getActiveChest = async (userId1, userId2) => {
   try {
     const chestsRef = collection(db, "chests");
@@ -94,14 +103,31 @@ export const getActiveChest = async (userId1, userId2) => {
     const chestDoc = querySnapshot.docs[0];
     const data = chestDoc.data();
     
+    // Debug log
+    console.log('Raw Firestore data:', data);
+    console.log('unlockDate raw:', data.unlockDate);
+    console.log('unlockDate type:', typeof data.unlockDate);
+    
+    // Proper timestamp conversion
+    const convertTimestamp = (timestamp) => {
+      if (!timestamp) return null;
+      if (timestamp.toDate) {
+        return timestamp.toDate();
+      }
+      if (timestamp.seconds) {
+        return new Date(timestamp.seconds * 1000);
+      }
+      return new Date(timestamp);
+    };
+    
     return {
       id: chestDoc.id,
       ...data,
       // Convert Firestore Timestamps to Date objects
-      startDate: data.startDate?.toDate() || null,
-      unlockDate: data.unlockDate?.toDate() || null,
-      createdAt: data.createdAt?.toDate() || null,
-      updatedAt: data.updatedAt?.toDate() || null
+      startDate: convertTimestamp(data.startDate),
+      unlockDate: convertTimestamp(data.unlockDate),
+      createdAt: convertTimestamp(data.createdAt),
+      updatedAt: convertTimestamp(data.updatedAt)
     };
 
   } catch (error) {
