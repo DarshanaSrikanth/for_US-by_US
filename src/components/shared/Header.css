@@ -36,6 +36,7 @@
   padding: 8px 12px;
   border-radius: 4px;
   transition: background-color 0.2s ease;
+  z-index: 1;
 }
 
 .back-button:hover {
@@ -63,6 +64,10 @@
   margin-bottom: 0;
 }
 
+.logo-container {
+  width: 40px;
+
+}
 .logout-button {
   background: #0b2345;
   border: 1px solid #ddd;

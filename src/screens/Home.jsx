@@ -650,9 +650,7 @@ const EmotionalWeather = ({ chits }) => {
         </h5>
         <span className="insights-count">{insights.length} pattern{insights.length !== 1 ? 's' : ''} detected</span>
       </div>
-      <div className="header-subtitle">
-        Patterns and observations from your emotional journey
-      </div>
+      
     </div>
 
     <div className="insights-list">
@@ -741,37 +739,67 @@ const EmotionalWeather = ({ chits }) => {
 };
 
 // Connection Visualization
-const ConnectionVisualization = ({ partnerInfo, connectionStrength }) => {
-  const connectionLevel = connectionStrength || 1;
-  
+const ConnectionVisualization = ({ partnerInfo }) => {
   return (
-    <div className="connection-viz">
-      <div className="connection-line">
-        <div 
-          className="connection-energy" 
-          style={{ 
-            width: `${connectionLevel * 20}%`,
-            opacity: 0.5 + (connectionLevel * 0.1)
-          }}
-        ></div>
-      </div>
+    <div className="connection-viz romantic">
       
-      <div className="connection-nodes">
-        <div className="connection-node you">
-          <div className="node-avatar">Y</div>
-          <div className="node-label">You</div>
+      {/* LEFT — YOU */}
+      <div className="connection-side left">
+        <span className="you-label">You</span>
+        <div className="user-icon you">
+          <UserIcon />
+          <div className="icon-glow" />
         </div>
-        
-        <div className="connection-node partner">
-          <div className="node-avatar">
-            {partnerInfo?.username?.charAt(0)?.toUpperCase() || 'P'}
-          </div>
-          <div className="node-label">{partnerInfo?.username || 'Partner'}</div>
+      </div>
+
+      {/* CENTER — LOVE ENERGY */}
+      <div className="love-center">
+        <div className="love-heart-wrapper">
+          <svg
+            className="love-heart"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            aria-hidden
+          >
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5
+              2 5.42 4.42 3 7.5 3c1.74 0 3.41.81
+              4.5 2.09C13.09 3.81 14.76 3
+              16.5 3 19.58 3 22 5.42
+              22 8.5c0 3.78-3.4 6.86-8.55
+              11.54L12 21.35z" />
+          </svg>
+
+          {/* romantic aura */}
+          <div className="heart-glow" />
+          <div className="heart-ring" />
+        </div>
+      </div>
+
+
+      {/* RIGHT — PARTNER */}
+      <div className="connection-side right">
+        <div className="user-icon partner">
+          <UserIcon />
+          <div className="icon-glow" />
+        </div>
+        <div className="partner-name">
+          {partnerInfo?.username || 'Partner'}
         </div>
       </div>
     </div>
   );
 };
+
+const UserIcon = () => (
+  <svg viewBox="0 0 24 24" fill="currentColor">
+    <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 
+      7.2 4.5 7.2 7.2 9.3 12 12 12zm0 
+      2.4c-3.2 0-9.6 1.6-9.6 
+      4.8V22h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z" />
+  </svg>
+);
+
+
 
 // Floating Chit Particles Background
 const FloatingChitsBackground = ({ count = 15 }) => {
@@ -1015,7 +1043,7 @@ const loadHomeData = async () => {
     const unlock = new Date(chestData.unlockDate);
     const diff = unlock - now;
     
-    if (diff <= 0) return 'Ready to open!';
+    
     
     const hours = Math.floor(diff / (1000 * 60 * 60));
     const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
@@ -1031,7 +1059,7 @@ const loadHomeData = async () => {
       <div className="home-container">
         <Header title="The Chest" />
         <div className="home-loading">
-          <LoadingSpinner size="large" text=" Loading your journey..." />
+          <LoadingSpinner size="large" text=" Loading your journey" />
         </div>
       </div>
     );
@@ -1191,7 +1219,7 @@ const loadHomeData = async () => {
                 <div className="active-chest-display">
                   <div className="chest-metaphor">
                     <div className={`metaphor-icon ${screenState === 'D' ? 'unlocked' : 'locked'}`}>
-                      {screenState === 'D' ? '🔓' : '🔒'}
+                      {screenState === 'D' ? '' : '🔒'}
                     </div>
                     
                     <div className="metaphor-text">
@@ -1209,7 +1237,6 @@ const loadHomeData = async () => {
                   <div className="time-display">
                     <div className="time-circle">
                       <div className="time-progress"></div>
-                      <div className="time-text">{getTimeUntilUnlock()}</div>
                     </div>
                     
                     <div className="time-details">
@@ -1253,8 +1280,7 @@ const loadHomeData = async () => {
                         className="chest-action-button unlock"
                         onClick={handleOpenChest}
                       >
-                        <span className="action-icon">🔓</span>
-                        Open Time Capsule
+                        Open
                       </button>
                     )}
                   </div>
@@ -1355,10 +1381,7 @@ const loadHomeData = async () => {
             <div className="reflection-header">
               <h3 className="card-title">
                 <span className="title-icon">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20Z" fill="currentColor"/>
-                    <path d="M11 7H13V9H11V7ZM11 11H13V17H11V11Z" fill="currentColor"/>
-                  </svg>
+                  
                 </span>
                 Daily Reflection
               </h3>
@@ -1509,7 +1532,7 @@ const loadHomeData = async () => {
                   <div className="stat-number">
                     {chitsHistory.reduce((sum, chest) => sum + chest.chits.length, 0)}
                   </div>
-                  <div className="stat-label">Total Chits</div>
+                  <div className="stat-label">Chits</div>
                 </div>
               </div>
               
@@ -1522,23 +1545,11 @@ const loadHomeData = async () => {
                 </div>
                 <div className="stat-content">
                   <div className="stat-number">{chestHistory.length}</div>
-                  <div className="stat-label">Time Capsules</div>
+                  <div className="stat-label">Chests</div>
                 </div>
               </div>
               
-              <div className="stat-item">
-                <div className="stat-icon">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M6 2V8H6.01L6 8.01L10 12L6 16L6.01 16.01H6V22H18V16.01H17.99L18 16L14 12L18 8.01L17.99 8H18V2H6ZM16 16.5V20H8V16.5L12 12.5L16 16.5ZM12 11.5L8 7.5V4H16V7.5L12 11.5Z" fill="currentColor"/>
-                  </svg>
-                </div>
-                <div className="stat-content">
-                  <div className="stat-number">
-                    {chestData ? getTimeUntilUnlock() : '--'}
-                  </div>
-                  <div className="stat-label">Until Unlock</div>
-                </div>
-              </div>
+              
               
               <div className="stat-item">
                 <div className="stat-icon">

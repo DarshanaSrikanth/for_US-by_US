@@ -9,7 +9,6 @@ const Onboarding = () => {
   const [formData, setFormData] = useState({
     username: '',
     password: '',
-    confirmPassword: '',
     gender: ''
   });
   const [loading, setLoading] = useState(false);
@@ -34,9 +33,7 @@ const Onboarding = () => {
         if (!formData.username || !formData.password || !formData.gender) {
           throw new Error('All fields are required');
         }
-        if (formData.password !== formData.confirmPassword) {
-          throw new Error('Passwords do not match');
-        }
+        
         if (formData.password.length < 6) {
           throw new Error('Password must be at least 6 characters');
         }
@@ -75,6 +72,8 @@ const Onboarding = () => {
         <source src="/videos/onboarding-bg.mp4" type="video/mp4" />
         Your browser does not support the video tag.
       </video>
+      <div className="video-overlay"></div>
+
       <div className="onboarding-card">
         {/* <div className="app-header">
           <h1 className="app-title">The Chest</h1>
@@ -103,7 +102,7 @@ const Onboarding = () => {
           )}
 
           <div className="form-group">
-            <label htmlFor="username">Username</label>
+            <p>Username</p>
             <input
               type="text"
               id="username"
@@ -117,7 +116,7 @@ const Onboarding = () => {
           </div>
 
           <div className="form-group">
-            <label htmlFor="password">Password</label>
+            <p>Password</p>
             <input
               type="password"
               id="password"
@@ -132,22 +131,9 @@ const Onboarding = () => {
 
           {isSignUp && (
             <>
-              <div className="form-group">
-                <label htmlFor="confirmPassword">Confirm Password</label>
-                <input
-                  type="password"
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                  placeholder="Re-enter your password"
-                  required
-                  disabled={loading}
-                />
-              </div>
 
               <div className="form-group">
-                <label>Gender</label>
+                <p>Gender</p>
                 <div className="gender-options">
                   <label className="gender-option">
                     <input

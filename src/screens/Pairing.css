@@ -267,6 +267,7 @@
   background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy) 100%);
   box-shadow: 0 20px 45px rgba(11, 35, 69, 0.5);
   transform: translateY(-1.5px);
+  color: #fff;
 }
 
 .cancel-button {

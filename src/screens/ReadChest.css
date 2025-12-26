@@ -13,8 +13,8 @@
   /* Typography scale */
   --font-size-xs: 0.75rem;    /* 12px */
   --font-size-sm: 0.875rem;   /* 14px */
-  --font-size-base: 1rem;     /* 16px */
-  --font-size-lg: 1.125rem;   /* 18px */
+  --font-size-base: 0.8rem;     /* 16px */
+  --font-size-lg: 1.0rem;   /* 18px */
   --font-size-xl: 1.25rem;    /* 20px */
   --font-size-2xl: 1.5rem;    /* 24px */
   --font-size-3xl: 1.75rem;   /* 28px */
@@ -382,20 +382,26 @@ body {
   background-color: #f8f9fa;
   color: var(--text-main);
   border: 1px solid #ddd;
+  font-size: 12px;
 }
 
 .prev-button:hover:not(:disabled) {
   background-color: #eaeaea;
   border-color: #ccc;
+  transform: scale(1.1);
 }
 
 .next-button {
-  background-color: #2c3e50;
+  background-color: #021c36ff;
   color: white;
+  font-size: 12px;
+
 }
 
 .next-button:hover:not(:disabled) {
-  background-color: #34495e;
+  background-color: #fffed8ff;
+  color: #021c36ff;
+  transform: scale(1.1);
 }
 
 .nav-button:disabled {
@@ -422,7 +428,7 @@ body {
   margin-top: 0;
   margin-bottom: 16px;
   color: var(--text-main);
-  font-size: var(--font-size-xl);
+  font-size: 10px;
   font-weight: var(--font-weight-semibold);
 }
 
@@ -465,7 +471,7 @@ body {
   font-size: var(--font-size-3xl);
   font-weight: var(--font-weight-light);
   color: var(--text-main);
-  margin: 0 0 32px 0;
+  margin: 0 0 2px 0;
   letter-spacing: 0.03em;
 }
 
@@ -486,7 +492,7 @@ body {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 24px;
-  margin-bottom: 40px;
+  margin-bottom: 10px;
   width: 100%;
   max-width: 500px;
 }
@@ -527,12 +533,15 @@ body {
   font-weight: var(--font-weight-medium);
   cursor: pointer;
   transition: background-color 0.2s ease;
-  margin-bottom: 32px;
+  margin-bottom: 20px;
   letter-spacing: 0.03em;
+
 }
 
 .completion-button:hover {
-  background-color: #34495e;
+  background-color: #fff5bbff;
+  color: #2c3e50;
+  transform: scale(1.1);
 }
 
 .completion-note {
@@ -565,8 +574,8 @@ body {
   padding: 60px 32px;
 }
 
-.empty-chest-icon {
-  font-size: 5rem;
+.empty-chest-icon-large {
+  font-size: 3rem;
   margin-bottom: 32px;
   color: var(--text-muted);
   opacity: 0.7;

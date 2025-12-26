@@ -93,7 +93,7 @@ const ReadChest = () => {
         if (partnerChits.length === 0) {
           // Just set empty chits array and continue
           setChits([]);
-          // We'll let the user see the empty state and complete reading normally
+          // We'll lt the user see the empty state and complete reading normally
         } else {
           setChits(partnerChits);
         }
@@ -292,7 +292,6 @@ const ReadChest = () => {
           <Header title="Reading Complete" showBack={false} />
           
           <div className="completion-screen">
-            <div className="completion-icon">📭</div>
             <h2 className="completion-title">Empty Chest</h2>
             <div className="completion-message">
               No chits were added to this chest by your partner.
@@ -308,7 +307,7 @@ const ReadChest = () => {
                 <span className="stat-value">{partnerInfo?.username || 'Partner'}</span>
               </div>
               <div className="stat-item">
-                <span className="stat-label">Chest duration:</span>
+                <span className="stat-label">duration:</span>
                 <span className="stat-value">
                   {chestData?.settings?.durationDays || 7} days
                 </span>
@@ -403,7 +402,7 @@ const ReadChest = () => {
             ></div>
           </div>
           <div className="progress-text">
-            {chits.length === 0 ? 'Empty Chest' : `${currentIndex + 1} of ${chits.length} chits`}
+            {chits.length === 0 ? '' : `${currentIndex + 1} of ${chits.length} chits`}
           </div>
         </div>
 

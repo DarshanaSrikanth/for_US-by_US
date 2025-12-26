@@ -9,7 +9,6 @@ const Header = ({
   title = 'The Chest', 
   showBack = false, 
   backPath = '/home',
-  logoUrl = '/path/to/your/logo.png' // Replace with your actual logo path
 }) => {
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const navigate = useNavigate();
@@ -30,7 +29,7 @@ const Header = ({
   };
 
   const handleBack = () => {
-    console.log('Navigate to:', backPath);
+    navigate(backPath);
   };
 
   
@@ -48,21 +47,19 @@ const Header = ({
       <div className="header-container">
         {/* Left side - Logo and back button */}
         <div className="header-left">
-          {showBack && (
-            <button className="back-btn" onClick={handleBack}>
-              <ChevronLeft size={20} />
-            </button>
-          )}
+          
           <div className="logo-container">
             <div className="logo-glow"></div>
             <img 
-              src={logoUrl} 
+              src='src\assets\A.png'
               alt={title}
               className="header-logo"
+              onClick={handleBack}
               onError={(e) => {
                 // Fallback if image doesn't load
                 e.target.style.display = 'none';
                 e.target.nextSibling.style.display = 'flex';
+              
               }}
             />
             
