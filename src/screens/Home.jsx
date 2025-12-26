@@ -10,7 +10,7 @@ import LoadingSpinner from '../components/shared/LoadingSpinner';
 import './Home.css';
 
 
-const isDev = true;
+// const isDev = true;
 
 // Timeline visualization component
 const TimelineVisualization = ({ chests, currentChest }) => {
@@ -985,7 +985,7 @@ const loadHomeData = async () => {
       }
 
       // Create new chest with dev mode duration
-      const durationInMinutes = isDev ? 1 : (settings.chestDuration * 1440);
+      const durationInMinutes = settings.chestDuration * 1440;
       console.log('Creating chest with duration:', durationInMinutes, 'minutes');
       
       const newChest = await createChest(user.uid, profile.pairedUserId, durationInMinutes);
@@ -1132,12 +1132,7 @@ const loadHomeData = async () => {
       
       <Header title="The Chest" />
       
-      {isDev && (
-        <div className="dev-badge">
-          <span className="dev-icon">⚡</span>
-          <span className="dev-text">Dev Mode Active</span>
-        </div>
-      )}
+      
       
       <main className="home-content">
         {/* Connection Header */}
@@ -1356,23 +1351,6 @@ const loadHomeData = async () => {
                     <path d="M19.14 12.94C19.18 12.64 19.2 12.34 19.2 12C19.2 11.66 19.18 11.36 19.14 11.06L21.16 9.38C21.36 9.22 21.4 8.95 21.26 8.73L19.34 5.72C19.21 5.53 18.96 5.48 18.77 5.6L16.48 7C15.96 6.66 15.38 6.39 14.76 6.2L14.4 3.73C14.36 3.49 14.17 3.31 13.93 3.31H10.07C9.83 3.31 9.64 3.49 9.6 3.73L9.24 6.2C8.62 6.39 8.04 6.66 7.52 7L5.23 5.6C5.04 5.48 4.79 5.53 4.66 5.72L2.74 8.73C2.6 8.95 2.64 9.22 2.84 9.38L4.86 11.06C4.82 11.36 4.8 11.66 4.8 12C4.8 12.34 4.82 12.64 4.86 12.94L2.84 14.62C2.64 14.78 2.6 15.05 2.74 15.27L4.66 18.28C4.79 18.47 5.04 18.52 5.23 18.4L7.52 17C8.04 17.34 8.62 17.61 9.24 17.8L9.6 20.27C9.64 20.51 9.83 20.69 10.07 20.69H13.93C14.17 20.69 14.36 20.51 14.4 20.27L14.76 17.8C15.38 17.61 15.96 17.34 16.48 17L18.77 18.4C18.96 18.52 19.21 18.47 19.34 18.28L21.26 15.27C21.4 15.05 21.36 14.78 21.16 14.62L19.14 12.94ZM12 15.5C10.07 15.5 8.5 13.93 8.5 12C8.5 10.07 10.07 8.5 12 8.5C13.93 8.5 15.5 10.07 15.5 12C15.5 13.93 13.93 15.5 12 15.5Z" fill="currentColor"/>
                   </svg>
                 </button>
-                
-                {isDev && screenState === 'C' && chestData && (
-                  <button 
-                    className="action-button-icon danger tooltip-container"
-                    onClick={() => {
-                      if (window.confirm('Delete current chest? This is for development only.')) {
-                        // Add delete logic here
-                      }
-                    }}
-                    aria-label="Reset Data (Dev)"
-                  >
-                    <svg className="button-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M6 19C6 20.1 6.9 21 8 21H16C17.1 21 18 20.1 18 19V7H6V19ZM19 4H15.5L14.5 3H9.5L8.5 4H5V6H19V4Z" fill="currentColor"/>
-                    </svg>
-                    <span className="tooltip-text">Reset Data (Development)</span>
-                  </button>
-                )}
               </div>
             </div>
                         

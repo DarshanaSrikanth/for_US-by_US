@@ -30,7 +30,9 @@ export const createChest = async (userId1, userId2, durationDays = 7) => {
 
     const timestamp = serverTimestamp();
     const unlockDate = new Date();
-    unlockDate.setMinutes(unlockDate.getMinutes() + (durationDays));
+    // unlockDate.setMinutes(unlockDate.getMinutes() + (durationDays));
+    unlockDate.setDate(unlockDate.getDate() + durationDays);
+    console.log("Unlock date set to:", unlockDate);
 
     
     const chestId = `${userId1}_${userId2}_${Date.now()}`;
