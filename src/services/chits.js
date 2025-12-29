@@ -120,7 +120,11 @@ export const getChitsForChest = async (chestId, readerId) => {
     }
 
     // Determine partner's ID
-    const partnerId = chestData.userId1 === readerId ? chestData.userId2 : chestData.userId1;
+    const partnerId = chestData.userId1 === readerId ? chestData.userId1 : chestData.userId2;
+    console.log('Partner ID:', partnerId);
+    console.log('Reader ID:', readerId);
+    console.log('User 1: ', chestData.userId1);
+    console.log('User 2: ', chestData.userId2);
 
     // Query partner's chits only
     const chitsRef = collection(db, "chests", chestId, "chits");
