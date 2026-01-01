@@ -5,6 +5,8 @@ import { getChitsHistory } from '../services/chits';
 import Header from '../components/shared/Header';
 import LoadingSpinner from '../components/shared/LoadingSpinner';
 import './History.css';
+import { getPartnerInfo } from '../services/pairing';
+import { generateHistoryPDF, exportHistoryAsText, isPDFSupported } from '../services/pdf';
 
 const History = () => {
   const navigate = useNavigate();
@@ -14,16 +16,32 @@ const History = () => {
   const [error, setError] = useState('');
   const [history, setHistory] = useState([]);
   const [selectedChest, setSelectedChest] = useState(null);
-  const [viewMode, setViewMode] = useState('list'); // 'list' or 'detail'
+  const [viewMode, setViewMode] = useState('list');
+  const [exportFormat, setExportFormat] = useState('pdf');
+  const [partnerInfo, setPartnerInfo] = useState(null);
+  const [exporting, setExporting] = useState(false); // Add this line
+ // 'pdf' or 'text'
+ // 'list' or 'detail'
 
   useEffect(() => {
     const loadHistory = async () => {
       if (!user) return;
 
+
+
       try {
         setLoading(true);
         const historyData = await getChitsHistory(user.uid);
         setHistory(historyData);
+        if (profile?.pairedUserId) {
+          try {
+            const partner = await getPartnerInfo(profile.pairedUserId);
+            setPartnerInfo(partner);
+          } catch (partnerErr) {
+            console.warn('Could not load partner info:', partnerErr);
+          }
+        }
+
       } catch (err) {
         console.error('Error loading history:', err);
         setError('Failed to load history');
@@ -34,6 +52,41 @@ const History = () => {
 
     loadHistory();
   }, [user]);
+
+  const handleExportHistory = async (format = exportFormat) => {
+    if (history.length === 0) {
+      alert('No history to export');
+      return;
+    }
+
+    try {
+      setExporting(true);
+      
+      if (format === 'pdf') {
+        if (!isPDFSupported()) {
+          alert('PDF export is not supported in your browser. Please try text export instead.');
+          setExportFormat('text');
+          return;
+        }
+        
+        await generateHistoryPDF(history, user.uid, partnerInfo);
+        
+      } else if (format === 'text') {
+        exportHistoryAsText(history, user.uid);
+      }
+      
+      // Show success message
+      setTimeout(() => {
+        alert(`History exported successfully as ${format.toUpperCase()}!`);
+      }, 500);
+      
+    } catch (err) {
+      console.error('Error exporting history:', err);
+      alert(`Failed to export history: ${err.message}`);
+    } finally {
+      setExporting(false);
+    }
+  };
 
   const handleChestSelect = (chest) => {
     setSelectedChest(chest);
@@ -66,6 +119,27 @@ const History = () => {
       hour: '2-digit',
       minute: '2-digit'
     });
+  };
+  const handleExportSingleChest = async (chest) => {
+    try {
+      setExporting(true);
+      
+      if (exportFormat === 'pdf') {
+        await generateHistoryPDF([chest], user.uid, partnerInfo);
+      } else {
+        exportHistoryAsText([chest], user.uid);
+      }
+      
+      setTimeout(() => {
+        alert(`Chest exported successfully as ${exportFormat.toUpperCase()}!`);
+      }, 500);
+      
+    } catch (err) {
+      console.error('Error exporting chest:', err);
+      alert(`Failed to export chest: ${err.message}`);
+    } finally {
+      setExporting(false);
+    }
   };
 
   const getEmotionDisplayName = (emotion) => {
@@ -134,6 +208,7 @@ const History = () => {
         <div className="history-header">
           <h2>Reading History</h2>
           <p>Past chits from your partner</p>
+          
         </div>
 
         {history.length === 0 ? (
@@ -174,6 +249,7 @@ const History = () => {
                   className="chest-card"
                   onClick={() => handleChestSelect(chest)}
                 >
+                  
                   <div className="chest-card-header">
                     <div className="chest-title">
                       <span className="chest-icon">📦</span>
@@ -182,6 +258,7 @@ const History = () => {
                     <div className="chest-date">
                       {formatDate(chest.unlockDate)}
                     </div>
+                    
                   </div>
                   
                   <div className="chest-stats">
@@ -204,6 +281,8 @@ const History = () => {
                           'Unknown'}
                       </span>
                     </div>
+                    
+
                   </div>
                   
                   <div className="chest-emotions">
@@ -234,8 +313,50 @@ const History = () => {
                   <div className="view-details">
                     Click to view details →
                   </div>
+                  
                 </div>
               ))}
+              {history.length > 0 && (
+            <div className="export-controls">
+              <div className="export-format-selector">
+                <label>Export Format:</label>
+                <div className="format-options">
+                  <button
+                    className={`format-option ${exportFormat === 'pdf' ? 'active' : ''}`}
+                    onClick={() => setExportFormat('pdf')}
+                    disabled={exporting}
+                  >
+                    PDF
+                  </button>
+                  <button
+                    className={`format-option ${exportFormat === 'text' ? 'active' : ''}`}
+                    onClick={() => setExportFormat('text')}
+                    disabled={exporting}
+                  >
+                    Text
+                  </button>
+                </div>
+              </div>
+              
+              <button
+                className="export-button"
+                onClick={() => handleExportHistory()}
+                disabled={exporting || history.length === 0}
+              >
+                {exporting ? (
+                  <>
+                    <span className="export-spinner"></span>
+                    Exporting...
+                  </>
+                ) : (
+                  <>
+                    <span className="export-icon">📥</span>
+                    Export All History
+                  </>
+                )}
+              </button>
+            </div>
+          )}
             </div>
           </>
         ) : (
