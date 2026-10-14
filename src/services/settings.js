@@ -48,7 +48,7 @@ export const updateUserSettings = async (userId, newSettings) => {
     // Validate chest duration
     if (newSettings.chestDuration !== undefined) {
       const duration = parseInt(newSettings.chestDuration);
-      if (isNaN(duration) || duration < 1 || duration > 30) {
+      if (isNaN(duration) || duration < 1 || duration > 58) {
         throw new Error("Chest duration must be between 1 and 30 days");
       }
     }

@@ -92,7 +92,7 @@ const Settings = () => {
   const validateForm = () => {
     const newErrors = {};
     
-    if (!formData.chestDuration || formData.chestDuration < 1 || formData.chestDuration > 30) {
+    if (!formData.chestDuration || formData.chestDuration < 1 || formData.chestDuration > 58) {
       newErrors.chestDuration = 'Chest duration must be between 1 and 30 days';
     }
 
@@ -241,7 +241,7 @@ const Settings = () => {
                   id="chestDuration"
                   name="chestDuration"
                   min="1"
-                  max="30"
+                  max="48"
                   step="1"
                   value={formData.chestDuration}
                   onChange={handleInputChange}

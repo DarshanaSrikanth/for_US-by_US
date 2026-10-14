@@ -31,7 +31,6 @@ export const createChest = async (userId1, userId2, durationDays = 7) => {
     const timestamp = serverTimestamp();
     const now = new Date();
     const unlockDate = new Date(now);
-    
     // Add duration in MINUTES (for dev mode) or DAYS
     if (durationDays < 1) {
       // If duration is less than 1, treat as minutes (dev mode)

@@ -120,7 +120,11 @@ export const getChitsForChest = async (chestId, readerId) => {
     }
 
     // Determine partner's ID
-    const partnerId = chestData.userId1 === readerId ? chestData.userId2 : chestData.userId1;
+    const partnerId = chestData.userId1 === readerId ? chestData.userId1 : chestData.userId2;
+    console.log('Partner ID:', partnerId);
+    console.log('Reader ID:', readerId);
+    console.log('User 1: ', chestData.userId1);
+    console.log('User 2: ', chestData.userId2);
 
     // Query partner's chits only
     const chitsRef = collection(db, "chests", chestId, "chits");
@@ -262,6 +266,7 @@ export const getMyChits = async (chestId, authorId) => {
 export const getChitsHistory = async (userId) => {
   try {
     // Get all chests involving this user
+    const nowTimestamp = Timestamp.now();
     const chestsRef = collection(db, "chests");
     const q1 = query(chestsRef, where("userId1", "==", userId));
     const q2 = query(chestsRef, where("userId2", "==", userId));
@@ -302,14 +307,16 @@ export const getChitsHistory = async (userId) => {
       });
 
       if (chits.length > 0) {
-        history.push({
-          chestId: chest.id,
-          startDate: chest.startDate?.toDate() || null,
-          unlockDate: chest.unlockDate?.toDate() || null,
-          status: chest.status,
-          chits,
-          partnerId
-        });
+        if (chest.unlockDate && chest.unlockDate <= nowTimestamp){
+          history.push({
+            chestId: chest.id,
+            startDate: chest.startDate?.toDate() || null,
+            unlockDate: chest.unlockDate?.toDate() || null,
+            status: chest.status,
+            chits,
+            partnerId
+          });
+        }
       }
     }
 
