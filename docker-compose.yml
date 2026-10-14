@@ -1,0 +1,9 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: for_us_by_us_app
+    ports:
+      - "3000:80"
+    restart: unless-stopped
